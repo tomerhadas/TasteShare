@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 sections:
   - title: "Header"
     content: |
@@ -114,3 +115,7 @@ sections:
       - **Shmuel Cohen**
 
       📧 [LinkedIn](https://www.linkedin.com/) | 🌍 [Portfolio](#)
+=======
+# TasteShare
+A social recipe-sharing web application built with ASP.NET Core Web API and Angula
+>>>>>>> 0ba51cd (Initial commit)
