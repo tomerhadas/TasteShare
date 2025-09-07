@@ -1,0 +1,28 @@
+# === Visual Studio / .NET ===
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+*.ldf
+*.mdf
+
+# === Entity Framework ===
+Migrations/
+
+# === Angular / Node ===
+node_modules/
+dist/
+.angular/
+npm-debug.log
+yarn-error.log
+
+# === OS Files ===
+.DS_Store
+Thumbs.db
+
+# === Others ===
+*.vsidx
+*.dbmdl
