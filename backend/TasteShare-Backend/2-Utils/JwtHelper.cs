@@ -35,6 +35,9 @@ public static class JwtHelper
         {
             Subject = new ClaimsIdentity(claims),
             Expires = DateTime.UtcNow.AddHours(AppConfig.JwtKeyExpire),
+            NotBefore = DateTime.UtcNow,
+            Issuer = "TasteShareAPI",
+            Audience = "TasteShareFrontend",
             SigningCredentials = new SigningCredentials(_symmetricSecurityKey, SecurityAlgorithms.HmacSha512)
         };
 
@@ -46,10 +49,13 @@ public static class JwtHelper
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = false,
-            ValidateAudience = false,
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidIssuer = "TasteShareAPI",
+            ValidAudience = "TasteShareFrontend",
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = _symmetricSecurityKey
+            IssuerSigningKey = _symmetricSecurityKey,
+            ClockSkew = TimeSpan.Zero
         };
     }
 }

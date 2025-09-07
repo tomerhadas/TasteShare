@@ -9,7 +9,7 @@ public class CatchAllFilter : IExceptionFilter
     public void OnException(ExceptionContext context)
     {
         // Determine the error message based on the environment
-        string message = AppConfig.IsProduction ? "Some error occur,please try again..." : GetInnerMessage(context.Exception);
+        string message = AppConfig.IsProduction ? "Some error occurred, please try again..." : GetInnerMessage(context.Exception);
 
         // Create an InternalServerError object with the error message
         InternalServerError error = new InternalServerError(message);

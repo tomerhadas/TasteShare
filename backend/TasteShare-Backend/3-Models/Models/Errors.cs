@@ -30,9 +30,5 @@ public class UnauthorizedError : BaseError<string>
     public UnauthorizedError(string message) : base(message) { }
 }
 
-
-public class InternalServerError : BaseError<string>
-{
-    public InternalServerError(string message) : base(message) { }
-}
+// InternalServerError was moved to 3-Models\Errors\InternalServerError.cs
 

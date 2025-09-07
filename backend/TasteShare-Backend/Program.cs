@@ -1,6 +1,8 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace TasteShare;
 
@@ -10,21 +12,41 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // קונפיגורציה כללית
+        // load config
         AppConfig.Configure(builder.Environment);
 
-        // Add services to the container.
+        // Controllers
         builder.Services.AddControllers();
 
-        //  Validators
-        builder.Services.AddFluentValidationAutoValidation()
-                        .AddValidatorsFromAssemblyContaining<CreateUserValidator>();
+        // DbContext
+        builder.Services.AddDbContext<TasteShareDbContext>(options =>
+            options.UseSqlServer(AppConfig.ConnectionString));
 
-        // JWT Authentication
+        // AutoMapper
+        builder.Services.AddAutoMapper(cfg =>
+        {
+            cfg.AddProfile<MappingProfile>();
+        });
+
+        // FluentValidation
+        builder.Services.AddFluentValidationAutoValidation();
+
+        // JWT Auth
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(JwtHelper.SetBearerOptions);
 
         builder.Services.AddAuthorization();
+
+        // CORS
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll", policy =>
+            {
+                policy.AllowAnyOrigin()
+                      .AllowAnyMethod()
+                      .AllowAnyHeader();
+            });
+        });
 
         // Swagger
         builder.Services.AddEndpointsApiExplorer();
@@ -44,8 +66,7 @@ public class Program
         builder.Services.AddScoped<CommentService>();
         builder.Services.AddScoped<RecipeIngredientService>();
         builder.Services.AddScoped<RecipeStepService>();
-        builder.Services.AddScoped<RecipeImageService>();  // Uncomment this line
-        //builder.Services.AddScoped<RecipeImageService>();
+        builder.Services.AddScoped<RecipeImageService>();
 
         var app = builder.Build();
 
@@ -56,18 +77,13 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-
-        //  Authentication,Authorization
+        app.UseCors("AllowAll");
         app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();
-        // Add services to the container.
-        builder.Services.AddControllers(options =>
-        {
-            // Register the global exception filter
-            options.Filters.Add<CatchAllFilter>();
-        });
+
         app.Run();
+
     }
 }

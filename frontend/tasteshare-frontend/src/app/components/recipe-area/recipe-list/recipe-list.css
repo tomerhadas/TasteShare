@@ -1,0 +1,26 @@
+.recipes-container {
+  width: 600px;
+  margin: 20px auto;
+  padding: 15px;
+}
+
+.recipes-container h2 {
+  text-align: center;
+}
+
+.recipes-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.recipes-container li {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin: 10px 0;
+  padding: 12px;
+}
+
+.error {
+  color: red;
+  text-align: center;
+}

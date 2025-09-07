@@ -1,0 +1,16 @@
+<!-- recipe-list.html -->
+<div class="recipes-container">
+  <h2>📖 מתכונים</h2>
+
+  <div *ngIf="loading">טוען מתכונים...</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <ul *ngIf="!loading && recipes.length > 0">
+    <li *ngFor="let recipe of recipes">
+      <h3>{{ recipe.title }}</h3>
+      <p>{{ recipe.description }}</p>
+      <span><b>מחבר:</b> {{ recipe.authorName }}</span>
+      <span><b>קושי:</b> {{ recipe.difficulty }}</span>
+    </li>
+  </ul>
+</div>
