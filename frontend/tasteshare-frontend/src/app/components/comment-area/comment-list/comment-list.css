@@ -1,0 +1,39 @@
+.comment-list-container {
+  direction: rtl;
+}
+
+.comment-card {
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.comment-card mat-card-content {
+  padding: 8px 16px 16px;
+}
+
+.comment-card p {
+  white-space: pre-line;
+  line-height: 1.5;
+}
+
+.loading-comments,
+.error-message,
+.no-comments {
+  padding: 24px;
+  text-align: center;
+  color: #666;
+}
+
+.error-message {
+  color: #f44336;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.error-message mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 8px;
+}

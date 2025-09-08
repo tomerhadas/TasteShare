@@ -1,0 +1,10 @@
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  min-height: calc(
+    100vh - 64px - 250px
+  ); /* Viewport height minus header and footer */
+  display: flex;
+  flex-direction: column;
+}

@@ -1,9 +1,58 @@
 <!-- navbar.html -->
-<nav>
-  <a routerLink="/">דף הבית</a> |
-  <a routerLink="/recipes">מתכונים</a> |
-  <a routerLink="/add-recipe">הוסף מתכון</a> |
-  <a routerLink="/login">התחבר</a>
-  <button (click)="logout()">התנתק</button>
-
-</nav>
+<mat-toolbar color="primary" class="navbar">
+  <div class="logo">
+    <a routerLink="/" class="logo-link">
+      <mat-icon>restaurant_menu</mat-icon>
+      <span>TasteShare</span>
+    </a>
+  </div>
+  <div class="spacer"></div>
+  <div class="nav-links">
+    <a mat-button routerLink="/" class="nav-link">
+      <mat-icon>home</mat-icon>
+      <span>דף הבית</span>
+    </a>
+    <a mat-button routerLink="/recipes" class="nav-link">
+      <mat-icon>menu_book</mat-icon>
+      <span>מתכונים</span>
+    </a>
+    <a mat-button routerLink="/add-recipe" class="nav-link">
+      <mat-icon>add_circle</mat-icon>
+      <span>הוסף מתכון</span>
+    </a>
+    <ng-container *ngIf="!isLoggedIn; else loggedInTemplate">
+      <a mat-button routerLink="/login" class="nav-link">
+        <mat-icon>login</mat-icon>
+        <span>התחבר</span>
+      </a>
+      <a mat-button routerLink="/register" class="nav-link">
+        <mat-icon>person_add</mat-icon>
+        <span>הרשמה</span>
+      </a>
+    </ng-container>
+    <ng-template #loggedInTemplate>
+      <button mat-button [matMenuTriggerFor]="menu" class="nav-link">
+        <mat-icon>account_circle</mat-icon>
+        <span>{{ username }}</span>
+      </button>
+      <mat-menu #menu="matMenu">
+        <a mat-menu-item routerLink="/profile">
+          <mat-icon>person</mat-icon>
+          <span>פרופיל</span>
+        </a>
+        <a mat-menu-item routerLink="/my-recipes">
+          <mat-icon>book</mat-icon>
+          <span>המתכונים שלי</span>
+        </a>
+        <a mat-menu-item *ngIf="isAdmin" routerLink="/admin">
+          <mat-icon>admin_panel_settings</mat-icon>
+          <span>ניהול</span>
+        </a>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>התנתק</span>
+        </button>
+      </mat-menu>
+    </ng-template>
+  </div>
+</mat-toolbar>

@@ -23,8 +23,14 @@ export class UserService {
     return this.http.post<UserDto>(`${this.apiUrl}/register`, dto);
   }
 
-  login(dto: LoginDto): Observable<UserDto> {
-    return this.http.post<UserDto>(`${this.apiUrl}/login`, dto);
+  login(dto: LoginDto): Observable<string> {
+    // Add Content-Type header explicitly and set responseType to text
+    const headers = { 'Content-Type': 'application/json' };
+    console.log('Raw login attempt with:', dto);
+    return this.http.post(`${this.apiUrl}/login`, dto, {
+      headers,
+      responseType: 'text', // Critical: get the raw token string, not JSON
+    });
   }
 
   delete(id: number): Observable<void> {

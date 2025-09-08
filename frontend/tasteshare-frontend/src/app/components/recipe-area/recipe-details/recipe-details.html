@@ -1,5 +1,143 @@
 <!-- recipe-details.html -->
-<div>
-  <h2>פרטי מתכון #{{ recipeId }}</h2>
-  <!-- פה נטען מידע אמיתי מה־backend -->
+<div class="recipe-details-container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>טוען מתכון...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage" class="error-container">
+    <mat-icon color="warn">error</mat-icon>
+    <p>{{ errorMessage }}</p>
+    <button mat-raised-button color="primary" routerLink="/recipes">
+      חזרה לכל המתכונים
+    </button>
+  </div>
+
+  <!-- Recipe Details -->
+  <div *ngIf="recipe && !loading" class="recipe-content">
+    <!-- Header Section -->
+    <div class="recipe-header">
+      <div class="recipe-title-section">
+        <h1>{{ recipe.title }}</h1>
+        <div class="recipe-meta">
+          <div class="meta-item">
+            <mat-icon>access_time</mat-icon>
+            <span>זמן הכנה: {{ recipe.prepMinutes }} דקות</span>
+          </div>
+          <div class="meta-item">
+            <mat-icon>timer</mat-icon>
+            <span>זמן בישול: {{ recipe.cookMinutes }} דקות</span>
+          </div>
+          <div class="meta-item">
+            <mat-icon>restaurant</mat-icon>
+            <span>מספר מנות: {{ recipe.servings }}</span>
+          </div>
+          <div class="meta-item">
+            <mat-icon>
+              {{ recipe.difficulty === 0 ? 'looks_one' : recipe.difficulty === 1
+              ? 'looks_two' : 'looks_3' }}
+            </mat-icon>
+            <span
+              >רמת קושי: {{ recipe.difficulty === 0 ? 'קל' : recipe.difficulty
+              === 1 ? 'בינוני' : 'קשה' }}</span
+            >
+          </div>
+        </div>
+        <div class="recipe-tags">
+          <mat-chip-set>
+            <mat-chip
+              [color]="recipe.foodType === 0 ? 'warn' : recipe.foodType === 1 ? 'primary' : 'accent'"
+            >
+              {{ recipe.foodType === 0 ? 'בשרי' : recipe.foodType === 1 ? 'חלבי'
+              : 'פרווה' }}
+            </mat-chip>
+            <mat-chip *ngIf="recipe.isKosher" color="primary">כשר</mat-chip>
+          </mat-chip-set>
+        </div>
+      </div>
+      <div class="recipe-image-gallery">
+        <div
+          *ngIf="recipe.images && recipe.images.length > 0"
+          class="main-image"
+        >
+          <img [src]="recipe.images[0].url" [alt]="recipe.title" />
+        </div>
+        <div
+          *ngIf="!recipe.images || recipe.images.length === 0"
+          class="no-image"
+        >
+          <mat-icon>no_photography</mat-icon>
+          <p>אין תמונות למתכון זה</p>
+        </div>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- Description -->
+    <div class="recipe-description">
+      <h2>תיאור</h2>
+      <p>{{ recipe.description }}</p>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- Ingredients & Instructions Tabs -->
+    <mat-tab-group mat-align-tabs="center" class="recipe-tabs">
+      <mat-tab label="מרכיבים">
+        <div class="ingredients-container">
+          <h2>מרכיבים</h2>
+          <ul class="ingredients-list">
+            <li *ngFor="let ingredient of recipe.ingredients">
+              <div class="ingredient-item">
+                <mat-icon>local_grocery_store</mat-icon>
+                <span
+                  >{{ ingredient.quantity }} {{ ingredient.unit }} {{
+                  ingredient.name }}</span
+                >
+              </div>
+            </li>
+          </ul>
+        </div>
+      </mat-tab>
+      <mat-tab label="הוראות הכנה">
+        <div class="steps-container">
+          <h2>שלבי הכנה</h2>
+          <div class="steps-list">
+            <div
+              *ngFor="let step of recipe.steps; let i = index"
+              class="step-item"
+            >
+              <div class="step-number">{{ i + 1 }}</div>
+              <div class="step-content">
+                <p>{{ step.instruction }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+    <mat-divider></mat-divider>
+
+    <!-- Author Info -->
+    <div class="author-info">
+      <h2>יוצר המתכון</h2>
+      <div class="author-card">
+        <mat-icon>person</mat-icon>
+        <span>{{ recipe.authorName }}</span>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- Comments Section -->
+    <div class="comments-section">
+      <h2>תגובות</h2>
+      <app-comment-form [recipeId]="recipeId"></app-comment-form>
+      <app-comment-list [recipeId]="recipeId"></app-comment-list>
+    </div>
+  </div>
 </div>

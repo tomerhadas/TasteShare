@@ -1,0 +1,20 @@
+.comment-form-container {
+  background-color: #f8f8f8;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.comment-input {
+  width: 100%;
+}
+
+.submit-button {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.submit-button mat-icon {
+  margin-left: 8px;
+}

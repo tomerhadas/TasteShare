@@ -1,1 +1,24 @@
-<p>comment-form works!</p>
+<div class="comment-form-container">
+  <mat-form-field appearance="outline" class="comment-input">
+    <mat-label>הוסף תגובה</mat-label>
+    <textarea
+      matInput
+      [(ngModel)]="commentText"
+      placeholder="כתוב את התגובה שלך כאן..."
+      rows="3"
+      [disabled]="submitting"
+    >
+    </textarea>
+  </mat-form-field>
+
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="submitComment()"
+    [disabled]="!commentText.trim() || submitting"
+    class="submit-button"
+  >
+    <mat-icon>send</mat-icon>
+    שלח תגובה
+  </button>
+</div>

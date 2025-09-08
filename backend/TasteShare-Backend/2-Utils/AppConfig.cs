@@ -4,8 +4,7 @@ public static class AppConfig
 {
     public static bool IsProduction;
     public static string ConnectionString { get; private set; } = null!;
-    public static string JwtKey { get; private set; } = "TasteShareSuperSecretKey!123456789";
-    public static int JwtKeyExpire { get; private set; } = 24; // default = 24h
+    public static string JwtKey { get; private set; } = "TasteShareSuperSecretKey!123456789_ThisIsALongerKeyToMeetTheRequiredLength_ForHS512Algorithm@2025"; public static int JwtKeyExpire { get; private set; } = 24; // default = 24h
 
     public static void Configure(IWebHostEnvironment env)
     {

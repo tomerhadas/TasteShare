@@ -2,21 +2,45 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background: #ff7043;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 0 16px;
+  direction: rtl; /* For RTL support */
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
   color: white;
 }
-.navbar .logo {
+
+.logo-link mat-icon {
+  margin-left: 8px;
+  font-size: 24px;
+  height: 24px;
+  width: 24px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.nav-link mat-icon {
+  margin-left: 4px;
+}
+
+.logo-link span {
   font-weight: bold;
   font-size: 1.2rem;
-}
-.navbar ul {
-  display: flex;
-  list-style: none;
-  gap: 1rem;
-}
-.navbar ul li a {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
 }
