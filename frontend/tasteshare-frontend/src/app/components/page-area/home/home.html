@@ -1,10 +1,33 @@
-<!-- home.html -->
-<div class="home-container">
-  <h1>🍴 TasteShare</h1>
-  <p>שתף וגלה מתכונים טעימים מכל העולם!</p>
-  <div class="buttons">
-    <a routerLink="/recipes" class="btn">ראה מתכונים</a>
-    <a routerLink="/login" class="btn">התחבר</a>
-    <a routerLink="/register" class="btn">הירשם</a>
+<section class="hero">
+  <div class="overlay"></div>
+
+  <div class="home-container">
+    <h1 class="brand">
+      <span class="emoji">🍴</span>
+      <span class="gradient-text">TasteShare</span>
+    </h1>
+
+    <p class="subtitle">
+      Start sharing and enjoy the world’s best <strong>home-made recipes</strong>.
+    </p>
+
+    <div class="buttons">
+      <a routerLink="/recipes" class="btn btn--primary">View Recipes</a>
+
+      <!-- כפתורים מותנים -->
+      @if (!isAuthenticated) {
+        <a routerLink="/login" class="btn btn--ghost">Login</a>
+        <a routerLink="/register" class="btn btn--accent">Register</a>
+      } @else {
+        <a routerLink="/add-recipe" class="btn btn--accent">Add Recipe</a>
+        <a routerLink="/profile" class="btn btn--ghost">My Profile</a>
+      }
+    </div>
+
+    <ul class="highlights">
+      <li>👨‍🍳 1,200+ creators</li>
+      <li>⭐ Community favorites</li>
+      <li>📸 Step-by-step photos</li>
+    </ul>
   </div>
-</div>
+</section>

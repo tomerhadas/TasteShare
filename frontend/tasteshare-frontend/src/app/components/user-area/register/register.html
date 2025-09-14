@@ -1,43 +1,117 @@
-<div class="register-container">
-  <h2>Register</h2>
+<div class="register-page">
+  <div class="bg-decor bg-1"></div>
+  <div class="bg-decor bg-2"></div>
 
-  <form (ngSubmit)="register()" #registerForm="ngForm">
-    <div>
-      <label for="username">Username</label>
-      <input
-        type="text"
-        id="username"
-        [(ngModel)]="dto.username"
-        name="username"
-        required
-      />
-    </div>
+  <div class="register-container">
+    <mat-card class="registration-card">
+      <mat-card-header>
+        <div mat-card-avatar class="register-avatar">
+          <mat-icon>person_add</mat-icon>
+        </div>
+        <mat-card-title>Create your account</mat-card-title>
+        <mat-card-subtitle>Join TasteShare and start sharing recipes</mat-card-subtitle>
+      </mat-card-header>
 
-    <div>
-      <label for="email">Email</label>
-      <input
-        type="email"
-        id="email"
-        [(ngModel)]="dto.email"
-        name="email"
-        required
-      />
-    </div>
+      <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 
-    <div>
-      <label for="password">Password</label>
-      <input
-        type="password"
-        id="password"
-        [(ngModel)]="dto.password"
-        name="password"
-        required
-      />
-    </div>
+      <mat-card-content>
+        <form (ngSubmit)="register()" #registerForm="ngForm" class="register-form" novalidate>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Username</mat-label>
+            <input
+              matInput
+              type="text"
+              [(ngModel)]="dto.username"
+              name="username"
+              required
+              placeholder="your_username"
+              autocomplete="username"
+            />
+            <mat-icon matSuffix>account_circle</mat-icon>
+            <mat-error>Username is required</mat-error>
+          </mat-form-field>
 
-    <button type="submit" [disabled]="registerForm.invalid">Register</button>
-  </form>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email</mat-label>
+            <input
+              matInput
+              type="email"
+              [(ngModel)]="dto.email"
+              name="email"
+              required
+              placeholder="you@example.com"
+              autocomplete="email"
+            />
+            <mat-icon matSuffix>email</mat-icon>
+            <mat-error>Enter a valid email address</mat-error>
+          </mat-form-field>
 
-  <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
-  <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Password</mat-label>
+            <input
+              matInput
+              [type]="hidePassword ? 'password' : 'text'"
+              [(ngModel)]="dto.password"
+              name="password"
+              required
+              placeholder="Create a password"
+              autocomplete="new-password"
+            />
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="hidePassword = !hidePassword"
+              [attr.aria-label]="'Toggle password visibility'"
+              [attr.aria-pressed]="hidePassword"
+            >
+              <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error>Password is required</mat-error>
+          </mat-form-field>
+
+          <!-- Password strength indicator (UI only) -->
+          <div class="pw-strength" *ngIf="dto.password">
+            <div class="meter"
+                 [class.s1]="passwordStrengthScore >= 1"
+                 [class.s2]="passwordStrengthScore >= 2"
+                 [class.s3]="passwordStrengthScore >= 3">
+              <span class="bar"></span>
+            </div>
+            <span class="label" aria-live="polite">
+              {{ passwordStrengthLabel }}
+            </span>
+          </div>
+          <!-- /Password strength -->
+
+          <div *ngIf="errorMessage" class="error-message" role="alert">
+            <mat-icon>error</mat-icon>
+            <span>{{ errorMessage }}</span>
+          </div>
+
+          <div *ngIf="loading" class="loading-container" aria-live="polite">
+            <p>Creating your account…</p>
+          </div>
+
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            class="full-width register-button"
+            [disabled]="registerForm.invalid || loading"
+          >
+            <mat-icon>person_add</mat-icon>
+            Create account
+          </button>
+        </form>
+      </mat-card-content>
+
+      <mat-card-footer>
+        <div class="login-link">
+          <span>Already have an account?</span>
+          <a routerLink="/login" mat-button color="accent">Sign in here</a>
+        </div>
+      </mat-card-footer>
+    </mat-card>
+  </div>
 </div>

@@ -3,7 +3,7 @@ import { Login } from './components/user-area/login/login';
 import { Register } from './components/user-area/register/register';
 import { Profile } from './components/user-area/profile/profile';
 import { RecipeList } from './components/recipe-area/recipe-list/recipe-list';
-import { RecipeForm } from './components/recipe-area/recipe-form/recipe-form';
+import { RecipeFormComponent } from './components/recipe-area/recipe-form/recipe-form';
 import { RecipeDetails } from './components/recipe-area/recipe-details/recipe-details';
 import { Home } from './components/page-area/home/home';
 import { authGuard, adminGuard } from './guards/auth.guard';
@@ -16,8 +16,16 @@ export const routes: Routes = [
   { path: 'profile', component: Profile, canActivate: [authGuard] },
   { path: 'recipes', component: RecipeList },
   { path: 'recipes/:id', component: RecipeDetails },
-  { path: 'add-recipe', component: RecipeForm, canActivate: [authGuard] },
-  { path: 'edit-recipe/:id', component: RecipeForm, canActivate: [authGuard] },
+  {
+    path: 'add-recipe',
+    component: RecipeFormComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'edit-recipe/:id',
+    component: RecipeFormComponent,
+    canActivate: [authGuard],
+  },
   { path: 'my-recipes', component: RecipeList, canActivate: [authGuard] },
   // Admin route to be implemented later
   // { path: 'admin', loadChildren: () => import('./components/admin-area/admin.routes').then(m => m.ADMIN_ROUTES), canActivate: [adminGuard] },

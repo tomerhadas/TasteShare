@@ -129,4 +129,12 @@ export class Login {
       },
     });
   }
+  forgotPassword() {
+  this.snackBar.open('באסה לך', 'סגור', {
+    duration: 3000,
+    horizontalPosition: 'center',
+    verticalPosition: 'bottom',
+  });
+}
+
 }

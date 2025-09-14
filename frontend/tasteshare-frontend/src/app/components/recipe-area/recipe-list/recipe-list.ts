@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'; // 👈 חובה בשביל ngIf/ngFor
+import { CommonModule } from '@angular/common'; 
 import { RecipeService } from '../../../services/recipe.service';
-import { RecipeDto } from '../../../models/recipe.model';
+import { RecipeDto, Difficulty, FoodType } from '../../../models/recipe.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
@@ -12,7 +12,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { Difficulty, FoodType } from '../../../models/recipe.model';
+import { NgIf, NgFor } from '@angular/common';
+
 
 @Component({
   selector: 'app-recipe-list',
@@ -31,14 +32,14 @@ import { Difficulty, FoodType } from '../../../models/recipe.model';
     RouterLink,
   ],
   templateUrl: './recipe-list.html',
-  styleUrls: ['./recipe-list.css', './recipe-list-additional.css'],
+  styleUrls: ['./recipe-list.css'],
 })
 export class RecipeList {
   recipes: RecipeDto[] = [];
   loading = true;
   errorMessage = '';
 
-  // For filtering
+  // Filtering
   searchTerm = '';
   selectedDifficulty: Difficulty | null = null;
   difficulties = Object.values(Difficulty);

@@ -1,39 +1,54 @@
 .comment-list-container {
-  direction: rtl;
+  margin-top: 20px;
 }
 
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes highlight {
+  from { background-color: rgba(59,130,246,0.15); }
+  to { background-color: #fff; }
+}
+
+/* Comment card */
 .comment-card {
-  margin-bottom: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 12px;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  animation: fadeInUp 0.4s ease;
 }
-
+.comment-card:hover {
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.new-comment {
+  animation: fadeInUp 0.4s ease, highlight 2s ease;
+  border-left: 3px solid #3b82f6;
+}
 .comment-card mat-card-content {
-  padding: 8px 16px 16px;
+  padding: 0 16px 16px;
 }
-
 .comment-card p {
-  white-space: pre-line;
+  margin: 0;
   line-height: 1.5;
+  color: #374151;
 }
 
+/* States */
 .loading-comments,
 .error-message,
 .no-comments {
-  padding: 24px;
   text-align: center;
-  color: #666;
+  padding: 20px;
+  color: #6b7280;
 }
+.error-message { color: #ef4444; }
+.error-message mat-icon { margin-bottom: 6px; }
 
-.error-message {
-  color: #f44336;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.error-message mat-icon {
-  font-size: 32px;
-  width: 32px;
-  height: 32px;
-  margin-bottom: 8px;
+/* Responsive */
+@media (max-width: 600px) {
+  .comment-card { margin-bottom: 10px; }
 }

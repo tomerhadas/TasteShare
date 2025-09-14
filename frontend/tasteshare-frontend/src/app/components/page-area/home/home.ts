@@ -1,13 +1,22 @@
-// src/app/components/home/home.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-
+import { AuthService } from '../../../services/auth.service';
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './home.html',
-  styleUrl: './home.css'
+  styleUrls: ['./home.css'],
+  providers: [AuthService]
 })
-export class Home {}
+export class Home {
+  isAuthenticated = false;
+
+  constructor(private authService: AuthService) {
+    this.isAuthenticated = this.authService.isLoggedIn();
+    this.authService.currentUser$.subscribe(() => {
+      this.isAuthenticated = this.authService.isLoggedIn();
+    });
+  }
+}

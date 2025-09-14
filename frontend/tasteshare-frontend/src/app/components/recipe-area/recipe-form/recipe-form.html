@@ -1,13 +1,534 @@
-<!-- recipe-form.html -->
-<div>
-  <h2>➕ הוסף מתכון</h2>
-  <form>
-    <label>שם מתכון:</label>
-    <input type="text" name="title" />
+<div class="recipe-form-container">
+  <mat-card class="recipe-form-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>restaurant</mat-icon>
+        Create New Recipe
+      </mat-card-title>
+      <mat-card-subtitle
+        >Share your culinary creation with the world</mat-card-subtitle
+      >
+    </mat-card-header>
 
-    <label>תיאור:</label>
-    <textarea name="description"></textarea>
+    <mat-card-content>
+      <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
+        <mat-stepper
+          #stepper
+          orientation="vertical"
+          linear
+          [ngClass]="{'stepper-animation': true}"
+        >
+          <!-- Basic Information Step -->
+          <mat-step
+            [stepControl]="getBasicInfoFormGroup()"
+            label="Basic Information"
+            state="recipe"
+          >
+            <ng-template matStepperIcon="recipe">
+              <mat-icon aria-label="Recipe icon">restaurant_menu</mat-icon>
+            </ng-template>
+            <div class="form-section">
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Recipe Title</mat-label>
+                  <input
+                    matInput
+                    formControlName="title"
+                    placeholder="Enter your recipe name"
+                  />
+                  <mat-icon matSuffix>title</mat-icon>
+                  @if (recipeForm.get('title')?.hasError('required')) {
+                  <mat-error> Title is required </mat-error>
+                  } @if (recipeForm.get('title')?.hasError('minlength')) {
+                  <mat-error>
+                    Title must be at least 3 characters long
+                  </mat-error>
+                  }
+                </mat-form-field>
+              </div>
 
-    <button type="submit">שמור</button>
-  </form>
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Description</mat-label>
+                  <textarea
+                    matInput
+                    formControlName="description"
+                    placeholder="Describe your recipe..."
+                    rows="4"
+                    cdkTextareaAutosize
+                  ></textarea>
+                  <mat-icon matSuffix>description</mat-icon>
+                  @if (recipeForm.get('description')?.hasError('required')) {
+                  <mat-error> Description is required </mat-error>
+                  } @if (recipeForm.get('description')?.hasError('minlength')) {
+                  <mat-error>
+                    Description must be at least 10 characters long
+                  </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>Servings</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="servings"
+                    min="1"
+                  />
+                  <mat-icon matSuffix>group</mat-icon>
+                  @if (recipeForm.get('servings')?.hasError('required')) {
+                  <mat-error> Number of servings is required </mat-error>
+                  } @if (recipeForm.get('servings')?.hasError('min')) {
+                  <mat-error> Must serve at least 1 person </mat-error>
+                  }
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>Prep Time (minutes)</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="prepMinutes"
+                    min="1"
+                  />
+                  <mat-icon matSuffix>schedule</mat-icon>
+                  @if (recipeForm.get('prepMinutes')?.hasError('required')) {
+                  <mat-error> Prep time is required </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>Cook Time (minutes)</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="cookMinutes"
+                    min="0"
+                  />
+                  <mat-icon matSuffix>timer</mat-icon>
+                  @if (recipeForm.get('cookMinutes')?.hasError('required')) {
+                  <mat-error> Cook time is required </mat-error>
+                  }
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>Difficulty</mat-label>
+                  <mat-select formControlName="difficulty">
+                    @for (option of difficultyOptions; track option.value) {
+                    <mat-option [value]="option.value">
+                      <mat-icon class="difficulty-icon"
+                        >{{ option.icon }}</mat-icon
+                      >
+                      {{ option.label }}
+                    </mat-option>
+                    }
+                  </mat-select>
+                  <mat-icon matSuffix>star_rate</mat-icon>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>Food Type</mat-label>
+                  <mat-select formControlName="foodType">
+                    @for (option of foodTypeOptions; track option.value) {
+                    <mat-option [value]="option.value">
+                      {{ option.label }}
+                    </mat-option>
+                    }
+                  </mat-select>
+                  <mat-icon matSuffix>restaurant_menu</mat-icon>
+                </mat-form-field>
+
+                <div class="checkbox-container half-width">
+                  <mat-checkbox formControlName="isKosher">
+                    <mat-icon class="kosher-icon">verified</mat-icon>
+                    Kosher Recipe
+                  </mat-checkbox>
+                </div>
+              </div>
+            </div>
+
+            <div class="step-actions">
+              <button
+                mat-raised-button
+                color="primary"
+                matStepperNext
+                [disabled]="!getBasicInfoFormGroup().valid"
+                class="button-click-effect"
+              >
+                Next: Add Ingredients
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+              <div class="stepper-progress">
+                <div class="stepper-progress-dot active"></div>
+                <div class="stepper-progress-dot"></div>
+                <div class="stepper-progress-dot"></div>
+                <div class="stepper-progress-dot"></div>
+              </div>
+            </div>
+          </mat-step>
+
+          <!-- Ingredients Step -->
+          <mat-step
+            [stepControl]="getIngredientsFormArray()"
+            label="Ingredients"
+            state="shopping_cart"
+          >
+            <ng-template matStepperIcon="shopping_cart">
+              <mat-icon aria-label="Ingredients icon">shopping_cart</mat-icon>
+            </ng-template>
+            <div class="form-section">
+              <div class="section-header">
+                <h3>Recipe Ingredients</h3>
+                <button
+                  mat-icon-button
+                  type="button"
+                  (click)="addIngredient()"
+                  color="primary"
+                  matTooltip="Add ingredient"
+                  class="button-click-effect"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+
+              <div formArrayName="ingredients" class="ingredients-list">
+                @for (ingredient of getIngredientsFormArray().controls; track
+                $index; let i = $index) {
+                <mat-card [formGroupName]="i" class="ingredient-card">
+                  <div class="ingredient-row">
+                    <mat-form-field
+                      appearance="outline"
+                      class="ingredient-name"
+                    >
+                      <mat-label>Ingredient</mat-label>
+                      <input
+                        matInput
+                        formControlName="name"
+                        placeholder="e.g., Flour"
+                      />
+                      @if (ingredient.get('name')?.hasError('required')) {
+                      <mat-error> Ingredient name is required </mat-error>
+                      }
+                    </mat-form-field>
+
+                    <mat-form-field
+                      appearance="outline"
+                      class="ingredient-amount"
+                    >
+                      <mat-label>Amount</mat-label>
+                      <input
+                        matInput
+                        formControlName="amount"
+                        placeholder="e.g., 2"
+                      />
+                      @if (ingredient.get('amount')?.hasError('required')) {
+                      <mat-error> Amount is required </mat-error>
+                      }
+                    </mat-form-field>
+
+                    <mat-form-field
+                      appearance="outline"
+                      class="ingredient-unit"
+                    >
+                      <mat-label>Unit</mat-label>
+                      <input
+                        matInput
+                        formControlName="unit"
+                        placeholder="e.g., cups"
+                      />
+                      @if (ingredient.get('unit')?.hasError('required')) {
+                      <mat-error> Unit is required </mat-error>
+                      }
+                    </mat-form-field>
+
+                    <button
+                      mat-icon-button
+                      type="button"
+                      (click)="removeIngredient(i)"
+                      color="warn"
+                      [disabled]="getIngredientsFormArray().length === 1"
+                      matTooltip="Remove ingredient"
+                    >
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </mat-card>
+                }
+              </div>
+            </div>
+
+            <div class="step-actions">
+              <button mat-button matStepperPrevious>
+                <mat-icon>arrow_back</mat-icon>
+                Back
+              </button>
+              <button
+                mat-raised-button
+                color="primary"
+                matStepperNext
+                [disabled]="!getIngredientsFormArray().valid"
+              >
+                Next: Add Instructions
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </mat-step>
+
+          <!-- Instructions Step -->
+          <mat-step
+            [stepControl]="getStepsFormArray()"
+            label="Instructions"
+            state="list"
+          >
+            <div class="form-section">
+              <div class="section-header">
+                <h3>Cooking Instructions</h3>
+                <button
+                  mat-icon-button
+                  type="button"
+                  (click)="addStep()"
+                  color="primary"
+                  matTooltip="Add step"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+
+              <div formArrayName="steps" class="steps-list">
+                @for (step of getStepsFormArray().controls; track $index; let i
+                = $index) {
+                <mat-card [formGroupName]="i" class="step-card">
+                  <div class="step-header">
+                    <mat-chip class="step-number">Step {{ i + 1 }}</mat-chip>
+                    <button
+                      mat-icon-button
+                      type="button"
+                      (click)="removeStep(i)"
+                      color="warn"
+                      [disabled]="getStepsFormArray().length === 1"
+                      matTooltip="Remove step"
+                    >
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Instruction</mat-label>
+                    <textarea
+                      matInput
+                      formControlName="instruction"
+                      placeholder="Describe this cooking step..."
+                      rows="3"
+                      cdkTextareaAutosize
+                    ></textarea>
+                    @if (step.get('instruction')?.hasError('required')) {
+                    <mat-error> Step instruction is required </mat-error>
+                    }
+                  </mat-form-field>
+                </mat-card>
+                }
+              </div>
+            </div>
+
+            <div class="step-actions">
+              <button mat-button matStepperPrevious>
+                <mat-icon>arrow_back</mat-icon>
+                Back
+              </button>
+              <button
+                mat-raised-button
+                color="primary"
+                matStepperNext
+                [disabled]="!getStepsFormArray().valid"
+              >
+                Next: Add Images
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </mat-step>
+
+          <!-- Images Step -->
+          <mat-step label="Images (Optional)" state="photo_camera">
+            <div class="form-section">
+              <div class="section-header">
+                <h3>Recipe Photos</h3>
+                <input
+                  #fileInput
+                  type="file"
+                  (change)="onFileSelect($event)"
+                  accept="image/*"
+                  multiple
+                  style="display: none"
+                />
+                <button
+                  mat-raised-button
+                  type="button"
+                  (click)="fileInput.click()"
+                  color="accent"
+                >
+                  <mat-icon>add_a_photo</mat-icon>
+                  Add Photos
+                </button>
+              </div>
+
+              @if (selectedFiles.length > 0) {
+              <div class="image-preview">
+                @for (file of selectedFiles; track $index; let i = $index) {
+                <mat-card class="image-card">
+                  <img
+                    [src]="file.preview"
+                    [alt]="file.name"
+                    class="preview-image"
+                  />
+                  <mat-card-actions>
+                    <button
+                      mat-icon-button
+                      (click)="removeFile(i)"
+                      color="warn"
+                      matTooltip="Remove image"
+                    >
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </mat-card-actions>
+                  <mat-card-content>
+                    <p class="file-name">{{ file.name }}</p>
+                  </mat-card-content>
+                </mat-card>
+                }
+              </div>
+              }
+            </div>
+
+            <div class="step-actions">
+              <button mat-button matStepperPrevious>
+                <mat-icon>arrow_back</mat-icon>
+                Back
+              </button>
+              <button
+                mat-raised-button
+                color="primary"
+                matStepperNext
+                class="button-click-effect"
+              >
+                Review Recipe
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+              <div class="stepper-progress">
+                <div class="stepper-progress-dot"></div>
+                <div class="stepper-progress-dot"></div>
+                <div class="stepper-progress-dot active"></div>
+                <div class="stepper-progress-dot"></div>
+              </div>
+            </div>
+          </mat-step>
+
+          <!-- Review Step -->
+          <mat-step label="Review" state="visibility">
+            <div class="form-section">
+              <div class="recipe-review">
+                <h3>Recipe Summary</h3>
+
+                <mat-card class="review-card">
+                  <mat-card-header>
+                    <mat-card-title
+                      >{{ recipeForm.get('title')?.value }}</mat-card-title
+                    >
+                    <mat-card-subtitle
+                      >{{ recipeForm.get('description')?.value
+                      }}</mat-card-subtitle
+                    >
+                  </mat-card-header>
+
+                  <mat-card-content>
+                    <div class="recipe-meta">
+                      <mat-chip-set>
+                        <mat-chip>
+                          <mat-icon matChipIcon>group</mat-icon>
+                          {{ recipeForm.get('servings')?.value }} servings
+                        </mat-chip>
+                        <mat-chip>
+                          <mat-icon matChipIcon>schedule</mat-icon>
+                          {{ recipeForm.get('prepMinutes')?.value }}min prep
+                        </mat-chip>
+                        <mat-chip>
+                          <mat-icon matChipIcon>timer</mat-icon>
+                          {{ recipeForm.get('cookMinutes')?.value }}min cook
+                        </mat-chip>
+                        <mat-chip>
+                          <mat-icon matChipIcon>star_rate</mat-icon>
+                          {{
+                          getDifficultyLabel(recipeForm.get('difficulty')?.value)
+                          }}
+                        </mat-chip>
+                        <mat-chip>
+                          <mat-icon matChipIcon>restaurant_menu</mat-icon>
+                          {{ getFoodTypeLabel(recipeForm.get('foodType')?.value)
+                          }}
+                        </mat-chip>
+                        @if (recipeForm.get('isKosher')?.value) {
+                        <mat-chip>
+                          <mat-icon matChipIcon>verified</mat-icon>
+                          Kosher
+                        </mat-chip>
+                        }
+                      </mat-chip-set>
+                    </div>
+
+                    <div class="ingredients-review">
+                      <h4>Ingredients:</h4>
+                      <ul>
+                        @for (ingredient of getIngredientsFormArray().controls;
+                        track $index) {
+                        <li>
+                          {{ ingredient.get('amount')?.value }} {{
+                          ingredient.get('unit')?.value }} {{
+                          ingredient.get('name')?.value }}
+                        </li>
+                        }
+                      </ul>
+                    </div>
+
+                    <div class="steps-review">
+                      <h4>Instructions:</h4>
+                      <ol>
+                        @for (step of getStepsFormArray().controls; track
+                        $index) {
+                        <li>{{ step.get('instruction')?.value }}</li>
+                        }
+                      </ol>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+            </div>
+
+            <div class="step-actions">
+              <button mat-button matStepperPrevious>
+                <mat-icon>arrow_back</mat-icon>
+                Back
+              </button>
+              <button
+                mat-raised-button
+                color="primary"
+                type="submit"
+                [disabled]="recipeForm.invalid || isSubmitting"
+              >
+                @if (!isSubmitting) {
+                <mat-icon>publish</mat-icon>
+                } @if (isSubmitting) {
+                <mat-spinner diameter="20"></mat-spinner>
+                } {{ isSubmitting ? 'Creating Recipe...' : 'Create Recipe' }}
+              </button>
+            </div>
+          </mat-step>
+        </mat-stepper>
+      </form>
+    </mat-card-content>
+  </mat-card>
 </div>

@@ -1,54 +1,224 @@
-.register-container {
-  max-width: 400px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background: #fafafa;
-}
-
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-label {
+:host {
   display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
+  direction: ltr;        /* האתר באנגלית */
+  color-scheme: dark;
 }
 
-input {
+/* רקע עמוק-כחול עם דקור רך */
+.register-page {
+  min-height: calc(100dvh - 64px); /* מניח navbar ~64px */
+  background: linear-gradient(180deg, #070e1e 0%, #0b1426 100%);
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: clamp(16px, 3vw, 32px);
+  overflow: hidden;
+}
+
+.bg-decor {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+.bg-1 {
+  width: 520px; height: 520px;
+  top: -140px; right: -140px;
+  background: radial-gradient(circle at 30% 30%, #60a5fa, rgba(96,165,250,0) 60%);
+}
+.bg-2 {
+  width: 560px; height: 560px;
+  bottom: -180px; left: -180px;
+  background: radial-gradient(circle at 70% 70%, #34d399, rgba(52,211,153,0) 60%);
+}
+
+.register-container {
+  width: min(480px, 92vw);
+  margin-inline: auto;
+}
+
+/* כרטיס “זכוכית” כהה תואם ל-navbar */
+.registration-card {
+  background: rgba(13, 23, 45, 0.78);
+  backdrop-filter: saturate(150%) blur(14px);
+  -webkit-backdrop-filter: saturate(150%) blur(14px);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 18px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+
+/* כותרת וכיתוב משנה */
+mat-card-header {
+  align-items: center;
+  gap: 12px;
+  padding: 20px 20px 8px;
+}
+mat-card-title {
+  color: #e6edf3;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  margin-bottom: 6px;
+}
+mat-card-subtitle {
+  color: #b8c4cf;
+}
+
+/* אוואטר */
+.register-avatar {
+  background: linear-gradient(45deg, #60a5fa, #34d399);
+  color: #0b1220;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+}
+.register-avatar mat-icon {
+  font-size: 24px;
+  width: 24px; height: 24px;
+}
+
+/* Progress bar – צבעים תואמים */
+:host ::ng-deep .mat-mdc-progress-bar {
+  --mdc-linear-progress-active-indicator-color: #60a5fa;
+  --mdc-linear-progress-track-color: rgba(96,165,250,.2);
+}
+
+/* טופס ושדות */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 20px 16px;
+}
+
+.full-width { width: 100%; }
+
+/* עיצוב שדות outline כהים עם פוקוס כחול */
+:host ::ng-deep .mat-mdc-form-field {
+  --field-bg: rgba(255,255,255,0.04);
+  --field-border: rgba(148,163,184,0.25);
+  --field-border-focus: rgba(96,165,250,0.55);
+  --field-label: #b8c4cf;
+  --field-fg: #e6edf3;
   width: 100%;
-  padding: 8px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
 }
 
-button {
-  width: 100%;
-  padding: 10px;
-  background: #4caf50;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+:host ::ng-deep .mdc-text-field--outlined {
+  background: var(--field-bg);
+  border-radius: 12px !important;
 }
 
-button:disabled {
-  background: #aaa;
-  cursor: not-allowed;
+/* קווי מסגרת */
+:host ::ng-deep .mdc-notched-outline__leading,
+:host ::ng-deep .mdc-notched-outline__notch,
+:host ::ng-deep .mdc-notched-outline__trailing {
+  border-color: var(--field-border) !important;
+}
+:host ::ng-deep .mdc-text-field--focused .mdc-notched-outline__leading,
+:host ::ng-deep .mdc-text-field--focused .mdc-notched-outline__notch,
+:host ::ng-deep .mdc-notched-outline__trailing {
+  border-color: var(--field-border-focus) !important;
 }
 
-.success {
-  color: green;
-  margin-top: 10px;
+:host ::ng-deep .mat-mdc-form-field-label { color: var(--field-label) !important; }
+:host ::ng-deep .mat-mdc-input-element { color: var(--field-fg) !important; }
+:host ::ng-deep .mat-mdc-form-field-icon-suffix mat-icon { color: #9fb3c8 !important; }
+
+/* הודעת שגיאה */
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fecaca;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin: 4px 0 2px;
+}
+.error-message mat-icon { color: #f87171; }
+
+/* כפתור Register – גרדיאנט תואם CTA של ה־navbar */
+.register-button {
+  height: 48px;
+  font-size: 16px;
+  font-weight: 800;
+  margin-top: 6px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #22c55e, #10b981 45%, #60a5fa 100%) !important;
+  color: #0b1220 !important;
+  box-shadow: 0 10px 24px rgba(96,165,250,.25);
+  text-transform: none;
+  transition: transform .12s ease, filter .2s ease;
+}
+.register-button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+.register-button mat-icon {
+  margin-right: 8px;
+}
+
+/* לינק ל־Login */
+.login-link {
   text-align: center;
+  padding: 12px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #b8c4cf;
+}
+.login-link a {
+  color: #60a5fa;
+  text-decoration: none;
+  font-weight: 700;
+}
+.login-link a:hover { text-decoration: underline; }
+
+/* מובייל */
+@media (max-width: 520px) {
+  .registration-card { border-radius: 16px; }
+  .register-form { padding: 16px 16px 14px; }
+}
+/* Password strength (UI only) */
+.pw-strength {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 4px 2px 6px;
 }
 
-.error {
-  color: red;
-  margin-top: 10px;
-  text-align: center;
+.pw-strength .meter {
+  position: relative;
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(148,163,184,0.20);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(148,163,184,0.18);
 }
+.pw-strength .meter .bar {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0%;
+  transition: width .25s ease, background .25s ease;
+}
+
+/* צבעים תואמים לנאבבר */
+.pw-strength .meter.s1 .bar { width: 33%; background: #ef4444; }  /* Weak - red */
+.pw-strength .meter.s2 .bar { width: 66%; background: #eab308; }  /* Medium - amber */
+.pw-strength .meter.s3 .bar { width: 100%; background: #22c55e; } /* Strong - green */
+
+.pw-strength .label {
+  min-width: 64px;
+  text-align: right;
+  font-size: 12px;
+  font-weight: 700;
+  color: #b8c4cf;
+}
+

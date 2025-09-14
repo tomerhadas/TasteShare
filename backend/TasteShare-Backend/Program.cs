@@ -16,8 +16,12 @@ public class Program
         AppConfig.Configure(builder.Environment);
 
         // Controllers
-        builder.Services.AddControllers();
-
+        // Controllers with JSON enum string support
+        builder.Services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+            });
         // DbContext
         builder.Services.AddDbContext<TasteShareDbContext>(options =>
             options.UseSqlServer(AppConfig.ConnectionString));

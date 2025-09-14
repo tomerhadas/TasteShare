@@ -43,7 +43,9 @@ export class RecipeDetails implements OnInit {
     private route: ActivatedRoute,
     private recipeService: RecipeService
   ) {
-    this.recipeId = Number(this.route.snapshot.paramMap.get('id'));
+    const idParam = this.route.snapshot.paramMap.get('id');
+    this.recipeId = idParam ? parseInt(idParam, 10) : 0;
+    console.log('Recipe ID from route:', this.recipeId);
   }
 
   ngOnInit(): void {

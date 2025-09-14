@@ -18,6 +18,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { catchError, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { EnvironmentService } from './services/environment.service';
 
 // Functional interceptor
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
@@ -30,12 +31,15 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     req.url.includes('/api/users/login') ||
     req.url.includes('/api/users/register');
 
+  const environmentService = inject(EnvironmentService);
+
   // Get the token
   const token = authService.getToken();
 
-  console.log('Interceptor - Request URL:', req.url);
-  console.log('Interceptor - Is auth request:', isAuthRequest);
-  console.log('Interceptor - Token exists:', !!token);
+  // Only log in development mode
+  environmentService.devLog('Interceptor - Request URL:', req.url);
+  environmentService.devLog('Interceptor - Is auth request:', isAuthRequest);
+  environmentService.devLog('Interceptor - Token exists:', !!token);
 
   // If token exists and this is not an auth request, add it to the request headers
   if (token && !isAuthRequest) {
@@ -44,7 +48,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log('Interceptor - Added auth header to request');
+
+    environmentService.devLog('Interceptor - Added auth header to request');
   }
 
   // Continue with the modified request

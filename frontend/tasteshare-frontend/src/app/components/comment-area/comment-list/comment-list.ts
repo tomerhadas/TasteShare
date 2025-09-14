@@ -1,11 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
-import { DatePipe } from '@angular/common';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommentService } from '../../../services/comment.service';
 import { CommentDto } from '../../../models/comment.model';
+import { EventService } from '../../../services/event.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-comment-list',
@@ -16,20 +18,45 @@ import { CommentDto } from '../../../models/comment.model';
     MatIconModule,
     MatDividerModule,
     DatePipe,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './comment-list.html',
   styleUrl: './comment-list.css',
 })
-export class CommentList implements OnInit {
+export class CommentList implements OnInit, OnDestroy {
   @Input() recipeId!: number;
   comments: CommentDto[] = [];
   loading = true;
   error = false;
 
-  constructor(private commentService: CommentService) {}
+  private commentSubscription: Subscription | null = null;
+
+  constructor(
+    private commentService: CommentService,
+    private eventService: EventService
+  ) {}
 
   ngOnInit() {
     this.loadComments();
+
+    this.commentSubscription = this.eventService.commentAdded$.subscribe(
+      (newComment) => {
+        if (newComment.recipeId === this.recipeId) {
+          this.comments = [newComment, ...this.comments];
+          newComment.isNew = true;
+
+          setTimeout(() => {
+            newComment.isNew = false;
+          }, 3000);
+        }
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    if (this.commentSubscription) {
+      this.commentSubscription.unsubscribe();
+    }
   }
 
   loadComments() {
