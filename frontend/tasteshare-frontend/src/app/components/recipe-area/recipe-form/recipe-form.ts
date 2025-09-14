@@ -8,7 +8,7 @@ import {
   FormArray,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -16,18 +16,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatStepperModule } from '@angular/material/stepper';
-import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { RecipeService } from '../../../services/recipe.service';
 import {
   CreateRecipeDto,
   Difficulty,
   FoodType,
+  RecipeDto,
 } from '../../../models/recipe.model';
 
 @Component({
@@ -44,12 +40,7 @@ import {
     MatIconModule,
     MatSelectModule,
     MatCheckboxModule,
-    MatStepperModule,
     MatSnackBarModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    MatChipsModule,
-    MatTooltipModule,
     TextFieldModule,
   ],
   templateUrl: './recipe-form.html',
@@ -57,15 +48,14 @@ import {
 })
 export class RecipeFormComponent implements OnInit {
   recipeForm!: FormGroup;
-  loading = false;
   isSubmitting = false;
-  selectedFiles: { file: File; name: string; preview: string }[] = [];
+  recipeId?: number;
+  isEditMode = false;
 
-  // Options for dropdowns
   difficultyOptions = [
-    { value: Difficulty.Easy, label: 'Easy', icon: 'star_outline' },
-    { value: Difficulty.Medium, label: 'Medium', icon: 'star_half' },
-    { value: Difficulty.Hard, label: 'Hard', icon: 'star' },
+    { value: Difficulty.Easy, label: 'Easy' },
+    { value: Difficulty.Medium, label: 'Medium' },
+    { value: Difficulty.Hard, label: 'Hard' },
   ];
 
   foodTypeOptions = [
@@ -83,20 +73,29 @@ export class RecipeFormComponent implements OnInit {
     'מיליליטר',
     'ליטר',
     'יחידות',
-    'זרת',
     'קמצוץ',
-    'עד כיסוי',
   ];
 
   constructor(
     private fb: FormBuilder,
     private recipeService: RecipeService,
+    private route: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
     this.initializeForm();
+
+    this.recipeId = Number(this.route.snapshot.paramMap.get('id'));
+    if (this.recipeId && !isNaN(this.recipeId)) {
+      this.isEditMode = true;
+      this.recipeService.getById(this.recipeId).subscribe({
+        next: (recipe) => this.populateForm(recipe),
+        error: () =>
+          this.snackBar.open('Failed to load recipe', 'Close', { duration: 3000 }),
+      });
+    }
   }
 
   initializeForm() {
@@ -106,20 +105,19 @@ export class RecipeFormComponent implements OnInit {
       servings: [4, [Validators.required, Validators.min(1)]],
       prepMinutes: [15, [Validators.required, Validators.min(1)]],
       cookMinutes: [10, [Validators.required, Validators.min(0)]],
-      difficulty: [Difficulty.Easy, [Validators.required]],
-      foodType: [FoodType.Parve, [Validators.required]],
+      difficulty: [Difficulty.Easy, Validators.required],
+      foodType: [FoodType.Parve, Validators.required],
       isKosher: [false],
       ingredients: this.fb.array([this.createIngredientGroup()]),
       steps: this.fb.array([this.createStepGroup(1)]),
-      images: this.fb.array([]),
     });
   }
 
   createIngredientGroup() {
     return this.fb.group({
-      name: ['', [Validators.required]],
-      amount: [1, [Validators.required, Validators.min(0.1)]],
-      unit: ['כוסות', [Validators.required]],
+      name: ['', Validators.required],
+      quantity: [1, [Validators.required, Validators.min(0.1)]],
+      unit: ['כוסות', Validators.required],
     });
   }
 
@@ -130,11 +128,11 @@ export class RecipeFormComponent implements OnInit {
     });
   }
 
-  get ingredients() {
+  get ingredients(): FormArray {
     return this.recipeForm.get('ingredients') as FormArray;
   }
 
-  get steps() {
+  get steps(): FormArray {
     return this.recipeForm.get('steps') as FormArray;
   }
 
@@ -143,9 +141,7 @@ export class RecipeFormComponent implements OnInit {
   }
 
   removeIngredient(index: number) {
-    if (this.ingredients.length > 1) {
-      this.ingredients.removeAt(index);
-    }
+    if (this.ingredients.length > 1) this.ingredients.removeAt(index);
   }
 
   addStep() {
@@ -156,109 +152,86 @@ export class RecipeFormComponent implements OnInit {
   removeStep(index: number) {
     if (this.steps.length > 1) {
       this.steps.removeAt(index);
-      // Update order numbers
-      this.steps.controls.forEach((step, i) => {
-        step.get('order')?.setValue(i + 1);
-      });
+      this.steps.controls.forEach((step, i) =>
+        step.get('order')?.setValue(i + 1)
+      );
     }
   }
 
-  // Helper methods for template
-  getBasicInfoFormGroup(): FormGroup {
-    return this.fb.group({
-      title: this.recipeForm.get('title'),
-      description: this.recipeForm.get('description'),
-      servings: this.recipeForm.get('servings'),
-      prepMinutes: this.recipeForm.get('prepMinutes'),
-      cookMinutes: this.recipeForm.get('cookMinutes'),
-      difficulty: this.recipeForm.get('difficulty'),
-      foodType: this.recipeForm.get('foodType'),
-      isKosher: this.recipeForm.get('isKosher'),
+  populateForm(recipe: RecipeDto) {
+    this.recipeForm.patchValue({
+      title: recipe.title,
+      description: recipe.description,
+      servings: recipe.servings,
+      prepMinutes: recipe.prepMinutes,
+      cookMinutes: recipe.cookMinutes,
+      difficulty: recipe.difficulty,
+      foodType: recipe.foodType,
+      isKosher: recipe.isKosher,
     });
-  }
 
-  getIngredientsFormArray(): FormArray {
-    return this.recipeForm.get('ingredients') as FormArray;
-  }
+    this.ingredients.clear();
+    recipe.ingredients.forEach((ing) =>
+      this.ingredients.push(
+        this.fb.group({
+          name: [ing.name, Validators.required],
+          quantity: [ing.quantity, [Validators.required, Validators.min(0.1)]],
+          unit: [ing.unit, Validators.required],
+        })
+      )
+    );
 
-  getStepsFormArray(): FormArray {
-    return this.recipeForm.get('steps') as FormArray;
-  }
-
-  getDifficultyLabel(value: Difficulty): string {
-    const option = this.difficultyOptions.find((opt) => opt.value === value);
-    return option ? option.label : '';
-  }
-
-  getFoodTypeLabel(value: FoodType): string {
-    const option = this.foodTypeOptions.find((opt) => opt.value === value);
-    return option ? option.label : '';
-  }
-
-  // File handling methods
-  onFileSelect(event: any): void {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        if (file.type.startsWith('image/')) {
-          const reader = new FileReader();
-          reader.onload = (e: any) => {
-            this.selectedFiles.push({
-              file: file,
-              name: file.name,
-              preview: e.target.result,
-            });
-          };
-          reader.readAsDataURL(file);
-        }
-      }
-    }
-  }
-
-  removeFile(index: number): void {
-    this.selectedFiles.splice(index, 1);
+    this.steps.clear();
+    recipe.steps.forEach((step) =>
+      this.steps.push(
+        this.fb.group({
+          order: [step.order],
+          instruction: [step.instruction, Validators.required],
+        })
+      )
+    );
   }
 
   onSubmit() {
-    if (this.recipeForm.valid) {
-      this.isSubmitting = true;
+    if (this.recipeForm.invalid) {
+      this.snackBar.open('Please fill all required fields', 'Close', {
+        duration: 3000,
+      });
+      return;
+    }
 
-      const recipeData: CreateRecipeDto = this.recipeForm.value;
-      console.log('Submitting recipe:', recipeData);
+    this.isSubmitting = true;
+    const recipeData: CreateRecipeDto = this.recipeForm.value;
 
-      this.recipeService.create(recipeData).subscribe({
-        next: (response) => {
-          console.log('Recipe created successfully:', response);
-          this.snackBar.open('Recipe created successfully!', 'Close', {
-            duration: 3000,
-            horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-          });
-          this.router.navigate(['/recipes']);
+    if (this.isEditMode && this.recipeId) {
+      this.recipeService.update(this.recipeId, recipeData).subscribe({
+        next: () => {
+          this.snackBar.open('Recipe updated successfully!', 'Close', { duration: 3000 });
+          this.router.navigate(['/my-recipes']);
         },
-        error: (error) => {
-          console.error('Error creating recipe:', error);
-          this.snackBar.open(
-            'Error creating recipe. Please try again.',
-            'Close',
-            {
-              duration: 5000,
-              horizontalPosition: 'center',
-              verticalPosition: 'bottom',
-            }
-          );
-          this.isSubmitting = false;
+        error: (err) => {
+          console.error('Error updating recipe:', err);
+          let errorMsg = 'Error updating recipe.';
+
+          if (err.message) errorMsg = err.message;
+          else if (err.status === 405) errorMsg = 'The API does not allow updating recipes.';
+          else if (err.status === 401) errorMsg = 'You must be logged in.';
+          else if (err.status === 403) errorMsg = 'You do not have permission to update this recipe.';
+
+          this.snackBar.open(errorMsg, 'Close', { duration: 5000 });
         },
-        complete: () => {
-          this.isSubmitting = false;
-        },
+        complete: () => (this.isSubmitting = false),
       });
     } else {
-      this.snackBar.open('Please fill in all required fields', 'Close', {
-        duration: 3000,
-        horizontalPosition: 'center',
-        verticalPosition: 'bottom',
+      this.recipeService.create(recipeData).subscribe({
+        next: () => {
+          this.snackBar.open('Recipe created successfully!', 'Close', { duration: 3000 });
+          this.router.navigate(['/recipes']);
+        },
+        error: () => {
+          this.snackBar.open('Error creating recipe.', 'Close', { duration: 3000 });
+        },
+        complete: () => (this.isSubmitting = false),
       });
     }
   }

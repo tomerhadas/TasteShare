@@ -1,0 +1,19 @@
+.profile-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.profile-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+a[mat-raised-button] {
+  border-radius: 8px;
+  text-transform: none;
+  font-weight: 500;
+}

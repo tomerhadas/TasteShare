@@ -1,0 +1,29 @@
+<div class="my-recipes-container">
+  <h2 class="page-title">המתכונים שלי</h2>
+
+  <div class="recipes-grid">
+    <mat-card *ngFor="let recipe of recipes" class="recipe-card">
+      <mat-card-header>
+        <mat-card-title>{{ recipe.title }}</mat-card-title>
+        <mat-card-subtitle>{{ recipe.description }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p><strong>Servings:</strong> {{ recipe.servings }}</p>
+        <p><strong>Prep:</strong> {{ recipe.prepMinutes }} min</p>
+        <p><strong>Cook:</strong> {{ recipe.cookMinutes }} min</p>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <a mat-stroked-button color="primary" [routerLink]="['/recipes', recipe.id]">
+          <mat-icon>visibility</mat-icon>
+          View
+        </a>
+        <a mat-flat-button color="accent" [routerLink]="['/recipes/edit', recipe.id]">
+          <mat-icon>edit</mat-icon>
+          Edit
+        </a>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

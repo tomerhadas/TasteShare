@@ -38,7 +38,75 @@ public class RecipeService
         await _recipeRepository.AddAsync(recipe);
         return _mapper.Map<RecipeDto>(recipe);
     }
+    // 4-Services\RecipeService.cs
+    public async Task<RecipeDto?> UpdateAsync(int id, CreateRecipeDto dto, int userId)
+    {
+        var recipe = await _recipeRepository.GetByIdAsync(id);
+        if (recipe == null || recipe.AuthorId != userId)
+            return null;
 
+        // עדכון השדות הבסיסיים של המתכון
+        recipe.Title = dto.Title;
+        recipe.Description = dto.Description;
+        recipe.Servings = dto.Servings;
+        recipe.PrepMinutes = dto.PrepMinutes;
+        recipe.CookMinutes = dto.CookMinutes;
+        recipe.Difficulty = dto.Difficulty;
+        recipe.FoodType = dto.FoodType;
+        recipe.IsKosher = dto.IsKosher;
+        recipe.UpdatedAt = DateTime.UtcNow;
+
+        // עדכון הרכיבים
+        // אפשרות פשוטה: מחיקה והוספה מחדש
+        if (dto.Ingredients != null && dto.Ingredients.Any())
+        {
+            // הסרת כל הרכיבים הקיימים
+            recipe.Ingredients.Clear();
+
+            // הוספת הרכיבים החדשים
+            foreach (var ingredientDto in dto.Ingredients)
+            {
+                var ingredient = _mapper.Map<RecipeIngredient>(ingredientDto);
+                ingredient.RecipeId = recipe.Id;
+                recipe.Ingredients.Add(ingredient);
+            }
+        }
+
+        // עדכון שלבי ההכנה
+        if (dto.Steps != null && dto.Steps.Any())
+        {
+            // הסרת כל השלבים הקיימים
+            recipe.Steps.Clear();
+
+            // הוספת השלבים החדשים
+            foreach (var stepDto in dto.Steps)
+            {
+                var step = _mapper.Map<RecipeStep>(stepDto);
+                step.RecipeId = recipe.Id;
+                recipe.Steps.Add(step);
+            }
+        }
+
+        // עדכון תמונות - שומר על תמונות קיימות אם לא נשלחו חדשות
+        if (dto.Images != null && dto.Images.Any())
+        {
+            // הסרת כל התמונות הקיימות
+            recipe.Images.Clear();
+
+            // הוספת התמונות החדשות
+            foreach (var imageDto in dto.Images)
+            {
+                var image = _mapper.Map<RecipeImage>(imageDto);
+                image.RecipeId = recipe.Id;
+                recipe.Images.Add(image);
+            }
+        }
+
+        // שמירת השינויים
+        await _recipeRepository.UpdateAsync(recipe);
+
+        return _mapper.Map<RecipeDto>(recipe);
+    }
     public async Task<bool> DeleteAsync(int id, int currentUserId, bool isAdmin)
     {
         var recipe = await _recipeRepository.GetByIdAsync(id);

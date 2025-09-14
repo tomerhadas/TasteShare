@@ -44,12 +44,20 @@ export class RecipeDetails implements OnInit {
     private recipeService: RecipeService
   ) {
     const idParam = this.route.snapshot.paramMap.get('id');
-    this.recipeId = idParam ? parseInt(idParam, 10) : 0;
+
+    // Improved validation to prevent NaN issues
+    const parsedId = idParam ? parseInt(idParam, 10) : 0;
+    this.recipeId = !isNaN(parsedId) ? parsedId : 0;
     console.log('Recipe ID from route:', this.recipeId);
   }
 
   ngOnInit(): void {
-    this.loadRecipe();
+    if (this.recipeId <= 0) {
+      this.errorMessage = 'מזהה מתכון לא חוקי';
+      this.loading = false;
+    } else {
+      this.loadRecipe();
+    }
   }
 
   loadRecipe(): void {

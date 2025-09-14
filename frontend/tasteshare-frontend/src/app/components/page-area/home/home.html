@@ -8,7 +8,8 @@
     </h1>
 
     <p class="subtitle">
-      Start sharing and enjoy the world’s best <strong>home-made recipes</strong>.
+      Start sharing and enjoy the world’s best
+      <strong>home-made recipes</strong>.
     </p>
 
     <div class="buttons">
@@ -16,11 +17,11 @@
 
       <!-- כפתורים מותנים -->
       @if (!isAuthenticated) {
-        <a routerLink="/login" class="btn btn--ghost">Login</a>
-        <a routerLink="/register" class="btn btn--accent">Register</a>
+      <a routerLink="/login" class="btn btn--ghost">Login</a>
+      <a routerLink="/register" class="btn btn--accent">Register</a>
       } @else {
-        <a routerLink="/add-recipe" class="btn btn--accent">Add Recipe</a>
-        <a routerLink="/profile" class="btn btn--ghost">My Profile</a>
+      <a routerLink="/recipes/add" class="btn btn--accent">Add Recipe</a>
+      <a routerLink="/profile" class="btn btn--ghost">My Profile</a>
       }
     </div>
 

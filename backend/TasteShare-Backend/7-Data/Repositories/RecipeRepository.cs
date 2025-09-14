@@ -48,7 +48,12 @@ public class RecipeRepository
         _context.Recipes.Add(recipe);
         await _context.SaveChangesAsync();
     }
-
+    public async Task UpdateAsync(Recipe recipe)
+    {
+        recipe.UpdatedAt = DateTime.UtcNow; // עדכון זמן השינוי האחרון
+        _context.Recipes.Update(recipe);
+        await _context.SaveChangesAsync();
+    }
     public async Task DeleteAsync(Recipe recipe)
     {
         _context.Recipes.Remove(recipe);

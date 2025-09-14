@@ -1,728 +1,84 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
-@import "./recipe-form-animations.css";
-
-.recipe-form-container {
-  max-width: 1000px;
-  margin: 2rem auto;
-  padding: 1rem;
-  min-height: 100vh;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 152, 0, 0.15) 0%,
-    rgba(255, 193, 7, 0.08) 25%,
-    rgba(76, 175, 80, 0.15) 50%,
-    rgba(33, 150, 243, 0.08) 75%,
-    rgba(156, 39, 176, 0.15) 100%
-  );
-  background-size: 400% 400%;
-  animation: gradient-shift 15s ease infinite;
-  border-radius: 16px;
-  position: relative;
-  overflow: hidden;
-  font-family: "Poppins", sans-serif;
-}
-
-@keyframes gradient-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* Add subtle pattern overlay */
-.recipe-form-container::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
-  z-index: -1;
-}
-
+/* כרטיס טופס ראשי */
 .recipe-form-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  overflow: hidden;
-  transform: translateY(0);
-  transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1),
-    box-shadow 0.5s ease;
-  animation: card-appear 1s ease-out;
-}
-
-.recipe-form-card:hover {
-  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15), 0 8px 24px rgba(0, 0, 0, 0.1);
-  transform: translateY(-5px);
-}
-
-.recipe-form-card mat-card-header {
-  background: linear-gradient(135deg, #ff9800, #f57c00);
-  color: white;
-  padding: 2rem;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.recipe-form-card mat-card-header::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 200%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.3) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  transform: translateX(-100%);
-  animation: shimmer 4s infinite;
-}
-
-@keyframes shimmer {
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-@keyframes card-appear {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.recipe-form-card mat-card-title {
-  font-size: 2.25rem;
-  font-weight: 800;
-  margin-bottom: 0.5rem;
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 24px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-  letter-spacing: 0.5px;
-}
-
-.recipe-form-card mat-card-title mat-icon {
-  font-size: 2rem;
-  height: 2rem;
-  width: 2rem;
-  animation: spin 20s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(5deg);
-  }
-  50% {
-    transform: rotate(0deg);
-  }
-  75% {
-    transform: rotate(-5deg);
-  }
-  100% {
-    transform: rotate(0deg);
-  }
-}
-
-.recipe-form-card mat-card-subtitle {
-  font-size: 1.2rem;
-  opacity: 0.95;
-  font-weight: 300;
-  margin-top: 0.5rem;
-  text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.1);
-}
-
-.recipe-form-card mat-card-content {
-  padding: 2rem;
-}
-
-/* Stepper Styling */
-::ng-deep .mat-stepper-vertical {
-  background: transparent;
-}
-
-::ng-deep .mat-step-header {
-  background: rgba(255, 255, 255, 0.8);
+  flex-direction: column;
+  gap: 20px;
   border-radius: 12px;
-  margin: 0.75rem 0;
-  padding: 0.75rem 1.25rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  border-left: 4px solid transparent;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
-::ng-deep .mat-step-header:hover {
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-  transform: translateX(5px);
-  border-left: 4px solid #ff9800;
-}
-
-::ng-deep .mat-step-header.cdk-keyboard-focused,
-::ng-deep .mat-step-header.cdk-program-focused,
-::ng-deep .mat-step-header.mat-step-header-state-edit {
-  background: linear-gradient(135deg, #ff9800, #f57c00);
-  color: white;
-}
-
-::ng-deep .mat-step-icon {
-  background: #ff9800 !important;
-  color: white !important;
-}
-
-::ng-deep .mat-step-icon-selected {
-  background: #4caf50 !important;
-}
-
-::ng-deep .mat-step-content {
-  margin: 1rem 0;
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 12px;
-  backdrop-filter: blur(5px);
-}
-
-/* Form Styling */
-.form-section {
-  padding: 1rem 0;
-}
-
-.form-row {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  align-items: flex-start;
-}
-
-.form-row:last-child {
-  margin-bottom: 0;
-}
-
-.full-width {
-  width: 100%;
-}
-
-.half-width {
-  flex: 1;
-}
-
-.checkbox-container {
-  display: flex;
-  align-items: center;
-  padding-top: 0.5rem;
-}
-
-.checkbox-container mat-checkbox {
-  font-size: 1rem;
-}
-
-.kosher-icon {
-  color: #4caf50;
-  margin-right: 0.5rem;
-}
-
-/* Form Fields */
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
-  color: rgba(0, 0, 0, 0.12);
-  border-radius: 12px;
-  transition: all 0.3s ease;
-}
-
-::ng-deep .mat-form-field-appearance-outline:hover .mat-form-field-outline {
-  color: rgba(255, 152, 0, 0.3);
-}
-
-::ng-deep
-  .mat-form-field-appearance-outline.mat-focused
-  .mat-form-field-outline-thick {
-  color: #ff9800;
-  border-radius: 12px;
-  box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.1);
-}
-
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
-  padding-bottom: 0;
-}
-
-/* Input field animations */
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
-  transition: all 0.3s ease;
-}
-
-::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-infix {
-  transform: translateY(-2px);
-}
-
-/* Icon animations */
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-suffix {
-  transition: all 0.3s ease;
-}
-
-::ng-deep
-  .mat-form-field-appearance-outline.mat-focused
-  .mat-form-field-suffix {
-  transform: scale(1.1);
-}
-
-/* Section Headers */
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid rgba(255, 152, 0, 0.2);
-}
-
-.section-header h3 {
+/* כותרות */
+.recipe-form-card h2 {
   margin: 0;
-  color: #ff9800;
+  font-size: 1.8rem;
   font-weight: 600;
+  text-align: center;
+  color: #333;
+}
+
+.recipe-form-card h3 {
+  margin-top: 16px;
   font-size: 1.3rem;
+  font-weight: 500;
+  color: #444;
 }
 
-/* Ingredients List */
-.ingredients-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.ingredient-card {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 12px;
-  padding: 1.25rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 152, 0, 0.1);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative;
-  overflow: hidden;
-}
-
-.ingredient-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 0;
-  background: linear-gradient(to bottom, #ff9800, #f57c00);
-  transition: height 0.3s ease;
-}
-
-.ingredient-card:hover {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  transform: translateY(-4px) scale(1.01);
-}
-
-.ingredient-card:hover::before {
-  height: 100%;
-}
-
-.ingredient-row {
-  display: flex;
-  gap: 1rem;
-  align-items: flex-start;
-}
-
-.ingredient-name {
-  flex: 2;
-}
-
-.ingredient-amount {
-  flex: 1;
-}
-
-.ingredient-unit {
-  flex: 1;
-}
-
-/* Steps List */
-.steps-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.step-card {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 12px;
-  padding: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(76, 175, 80, 0.1);
-  transition: all 0.3s ease;
-}
-
-.step-card:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  transform: translateY(-2px);
-}
-
-.step-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.step-number {
-  background: #4caf50;
-  color: white;
-  font-weight: 600;
-}
-
-/* Image Upload */
-.image-preview {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.image-card {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.image-card:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  transform: translateY(-2px);
-}
-
-.preview-image {
+/* שדות */
+mat-form-field {
   width: 100%;
-  height: 150px;
-  object-fit: cover;
 }
 
-.file-name {
-  font-size: 0.85rem;
-  color: #666;
-  margin: 0;
-  text-align: center;
-  padding: 0.5rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Review Section */
-.recipe-review {
-  padding: 1rem;
-}
-
-.review-card {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  margin-top: 1rem;
-}
-
-.recipe-meta {
-  margin: 1rem 0;
-}
-
-.recipe-meta mat-chip-set {
+/* שורות רכיבים ושלבים */
+.ingredient-row,
+.step-row {
   display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
   flex-wrap: wrap;
-  gap: 0.5rem;
 }
 
-.recipe-meta mat-chip {
-  background: rgba(255, 152, 0, 0.1);
-  color: #e65100;
-  border: 1px solid rgba(255, 152, 0, 0.3);
-  border-radius: 20px;
-  padding: 0.3rem 0.8rem;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
+.step-field {
+  flex: 1;
 }
 
-.ingredients-review,
-.steps-review {
-  margin: 1.5rem 0;
+/* כפתורים */
+button {
+  margin-top: 8px;
 }
 
-.ingredients-review h4,
-.steps-review h4 {
-  color: #ff9800;
-  font-weight: 600;
-  margin-bottom: 0.8rem;
-  font-size: 1.1rem;
+button[mat-raised-button] {
+  align-self: flex-end;
 }
 
-.ingredients-review ul,
-.steps-review ol {
-  padding-left: 1.5rem;
-  line-height: 1.6;
+/* כפתורי הוספה */
+button[mat-stroked-button] {
+  margin-top: 10px;
+  border: 1px dashed #888;
 }
 
-.ingredients-review li,
-.steps-review li {
-  margin-bottom: 0.5rem;
-  color: #424242;
+/* איקון מחיקה */
+button[mat-icon-button] {
+  margin-top: 4px;
 }
 
-/* Step Actions */
-.step-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 2rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  position: relative;
-}
-
-.step-actions::before {
-  content: "";
-  position: absolute;
-  top: -1px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #ff9800, #f57c00);
-  transition: width 0.6s ease;
-}
-
-.step-actions:hover::before {
-  width: 100%;
-}
-
-.step-actions button {
-  border-radius: 30px;
-  padding: 0.75rem 1.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative;
-  overflow: hidden;
-}
-
-.step-actions button mat-icon {
-  margin: 0 0.3rem;
-  transition: all 0.3s ease;
-}
-
-.step-actions button:hover mat-icon {
-  transform: translateX(4px);
-}
-
-.step-actions button[color="primary"] {
-  background: linear-gradient(135deg, #ff9800, #f57c00);
-  color: white;
-  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
-}
-
-.step-actions button::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 10px;
-  height: 10px;
-  background: rgba(255, 255, 255, 0.4);
-  opacity: 0;
-  border-radius: 100%;
-  transform: scale(1, 1) translate(-50%, -50%);
-  transform-origin: 50% 50%;
-}
-
-.step-actions button:focus:not(:active)::after {
-  animation: ripple 1s ease-out;
-}
-
-@keyframes ripple {
-  0% {
-    transform: scale(0, 0);
-    opacity: 0.5;
-  }
-  20% {
-    transform: scale(25, 25);
-    opacity: 0.3;
-  }
-  100% {
-    transform: scale(40, 40);
-    opacity: 0;
-  }
-}
-
-.step-actions button[color="primary"]:hover:not(:disabled) {
-  background: linear-gradient(135deg, #f57c00, #e65100);
-  box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4);
-  transform: translateY(-2px);
-}
-
-.step-actions button[color="primary"]:disabled {
-  background: rgba(0, 0, 0, 0.12);
-  color: rgba(0, 0, 0, 0.26);
-  box-shadow: none;
-}
-
-/* Difficulty Icons */
-.difficulty-icon {
-  font-size: 1.2rem;
-  margin-right: 0.5rem;
-  vertical-align: middle;
-}
-
-/* Button Styling */
-::ng-deep .mat-raised-button {
-  border-radius: 25px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
-}
-
-::ng-deep .mat-raised-button:hover:not(:disabled) {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-  transform: translateY(-2px);
-}
-
-::ng-deep .mat-icon-button {
-  border-radius: 50%;
-  transition: all 0.3s ease;
-}
-
-::ng-deep .mat-icon-button:hover {
-  transform: scale(1.1);
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .recipe-form-container {
-    margin: 1rem;
-    padding: 0.5rem;
-  }
-
-  .recipe-form-card mat-card-content {
-    padding: 1rem;
-  }
-
-  .form-row {
+/* רספונסיביות לנייד */
+@media (max-width: 600px) {
+  .ingredient-row,
+  .step-row {
     flex-direction: column;
-    gap: 0.5rem;
+    align-items: stretch;
   }
 
-  .half-width {
+  button[mat-raised-button] {
     width: 100%;
   }
 
-  .ingredient-row {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .ingredient-name,
-  .ingredient-amount,
-  .ingredient-unit {
-    flex: none;
+  button[mat-stroked-button] {
     width: 100%;
   }
-
-  .step-actions {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .image-preview {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* RTL Support */
-[dir="rtl"] .form-row {
-  direction: rtl;
-}
-
-[dir="rtl"] .ingredient-row {
-  direction: rtl;
-}
-
-[dir="rtl"] .step-actions {
-  direction: rtl;
-}
-
-[dir="rtl"] .section-header {
-  direction: rtl;
-  text-align: right;
-}
-
-/* Loading State */
-.mat-spinner {
-  margin: 0 0.5rem;
-}
-
-/* Animation */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.recipe-form-card {
-  animation: fadeInUp 0.6s ease-out;
-}
-
-.ingredient-card,
-.step-card {
-  animation: fadeInUp 0.4s ease-out;
-}
-
-/* Focus States */
-::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
-  color: #ff9800 !important;
-}
-
-::ng-deep .mat-input-element:focus {
-  caret-color: #ff9800;
-}
-
-/* Error States */
-::ng-deep .mat-form-field-invalid .mat-form-field-outline-thick {
-  color: #f44336 !important;
-}
-
-/* Success States */
-.mat-step-header.mat-step-header-state-done {
-  background: rgba(76, 175, 80, 0.1) !important;
-  color: #4caf50 !important;
-}
-
-::ng-deep .mat-step-icon-state-done {
-  background: #4caf50 !important;
-  color: white !important;
 }

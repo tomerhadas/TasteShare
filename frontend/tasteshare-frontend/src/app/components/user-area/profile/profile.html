@@ -1,1 +1,15 @@
-<p>profile works!</p>
+<div class="profile-container">
+  <h2>My Profile</h2>
+
+  <div class="profile-actions">
+    <a mat-raised-button color="primary" routerLink="/profile">
+      <mat-icon>person</mat-icon>
+      View Profile
+    </a>
+
+    <a mat-raised-button color="accent" routerLink="/my-recipes" *ngIf="authService.isLoggedIn()">
+      <mat-icon>list_alt</mat-icon>
+      My Recipes
+    </a>
+  </div>
+</div>

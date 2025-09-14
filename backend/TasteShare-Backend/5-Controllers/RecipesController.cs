@@ -48,6 +48,18 @@ public class RecipeController : ControllerBase, IDisposable
         var recipe = await _recipeService.CreateAsync(dto, userId);
         return CreatedAtAction(nameof(GetById), new { id = recipe.Id }, recipe);
     }
+    [HttpPut("{id:int}")]
+    [Authorize]
+    public async Task<ActionResult<RecipeDto>> Update(int id, [FromBody] CreateRecipeDto dto)
+    {
+        var userId = int.Parse(User.FindFirst("id")!.Value);
+        var updatedRecipe = await _recipeService.UpdateAsync(id, dto, userId);
+
+        if (updatedRecipe == null)
+            return Forbid(); // המשתמש אינו בעל המתכון או שהמתכון לא נמצא
+
+        return Ok(updatedRecipe);
+    }
 
     [HttpDelete("{id:int}")]
     [Authorize(Roles = "Admin,Member")]
