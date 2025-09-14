@@ -24,7 +24,11 @@ public class RecipeService
         var recipe = await _recipeRepository.GetByIdAsync(id);
         return recipe == null ? null : _mapper.Map<RecipeDto>(recipe);
     }
-
+    public async Task<IEnumerable<RecipeDto>> GetByAuthorIdAsync(int authorId)
+    {
+        var recipes = await _recipeRepository.GetByAuthorIdAsync(authorId);
+        return _mapper.Map<IEnumerable<RecipeDto>>(recipes);
+    }
     public async Task<RecipeDto> CreateAsync(CreateRecipeDto dto, int authorId)
     {
         var recipe = _mapper.Map<Recipe>(dto);

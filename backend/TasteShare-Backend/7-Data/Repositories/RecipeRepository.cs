@@ -32,7 +32,17 @@ public class RecipeRepository
             .Include(r => r.Comments)
             .FirstOrDefaultAsync(r => r.Id == id);
     }
-
+    public async Task<List<Recipe>> GetByAuthorIdAsync(int authorId)
+    {
+        return await _context.Recipes
+            .Include(r => r.Author)
+            .Include(r => r.Ingredients)
+            .Include(r => r.Steps)
+            .Include(r => r.Images)
+            .Include(r => r.Comments)
+            .Where(r => r.AuthorId == authorId)
+            .ToListAsync();
+    }
     public async Task AddAsync(Recipe recipe)
     {
         _context.Recipes.Add(recipe);

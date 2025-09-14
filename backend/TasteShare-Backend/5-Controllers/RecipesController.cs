@@ -32,7 +32,14 @@ public class RecipeController : ControllerBase, IDisposable
 
         return Ok(recipe);
     }
-
+    [HttpGet("my-recipes")]
+    [Authorize]
+    public async Task<ActionResult<IEnumerable<RecipeDto>>> GetMyRecipes()
+    {
+        var userId = int.Parse(User.FindFirst("id")!.Value);
+        var recipes = await _recipeService.GetByAuthorIdAsync(userId);
+        return Ok(recipes);
+    }
     [HttpPost]
     [Authorize]
     public async Task<ActionResult<RecipeDto>> Create([FromBody] CreateRecipeDto dto)
