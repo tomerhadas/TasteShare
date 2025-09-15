@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 sections:
   - title: "Header"
     content: |
@@ -42,14 +41,7 @@ sections:
         - Mapping with AutoMapper
 
       Run backend:
-
-      ```bash
-      cd backend/TasteShare-Backend
-      dotnet restore
-      dotnet ef database update
-      dotnet run
-      ```
-
+      just hit the play
       Backend will run at:  
       👉 https://localhost:7015
 
@@ -65,11 +57,7 @@ sections:
 
       Run frontend:
 
-      ```bash
-      cd frontend/tasteshare-frontend
-      npm install
-      ng serve -o
-      ```
+      npm start
 
       Frontend will run at:  
       👉 http://localhost:4200
@@ -114,8 +102,6 @@ sections:
       - **Tomer Hadas**  
       - **Shmuel Cohen**
 
-      📧 [LinkedIn](https://www.linkedin.com/) | 🌍 [Portfolio](#)
 =======
 # TasteShare
-A social recipe-sharing web application built with ASP.NET Core Web API and Angula
->>>>>>> 0ba51cd (Initial commit)
+A social recipe-sharing web application built with ASP.NET Core Web API and Angular
