@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'; 
+import { CommonModule } from '@angular/common';
 import { RecipeService } from '../../../services/recipe.service';
 import { RecipeDto, Difficulty, FoodType } from '../../../models/recipe.model';
 import { MatCardModule } from '@angular/material/card';
@@ -13,7 +13,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { NgIf, NgFor } from '@angular/common';
-
 
 @Component({
   selector: 'app-recipe-list',
@@ -42,9 +41,9 @@ export class RecipeList {
   // Filtering
   searchTerm = '';
   selectedDifficulty: Difficulty | null = null;
-  difficulties = Object.values(Difficulty);
+  difficulties = [Difficulty.Easy, Difficulty.Medium, Difficulty.Hard]; // Only use the enum values
   selectedFoodType: FoodType | null = null;
-  foodTypes = Object.values(FoodType);
+  foodTypes = [FoodType.Meat, FoodType.Dairy, FoodType.Parve]; // Only use the enum values
 
   constructor(private recipeService: RecipeService) {}
 

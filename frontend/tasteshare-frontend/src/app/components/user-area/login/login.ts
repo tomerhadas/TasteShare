@@ -76,16 +76,42 @@ export class Login {
             const payload = JSON.parse(atob(parts[1]));
             console.log('Decoded token payload:', payload);
 
-            // Store user data if available
-            if (payload.nameid || payload.unique_name || payload.email) {
-              const user = {
-                id: payload.nameid || 0,
-                username: payload.unique_name || this.dto.email.split('@')[0],
-                email: payload.email || this.dto.email,
-                role: payload.role || 'Member',
-              };
-              localStorage.setItem('current_user', JSON.stringify(user));
-            }
+            // מסתכל על כל הפרמטרים האפשריים ב-payload (מה-צילום מסך שלך)
+            console.log('All payload keys:', Object.keys(payload));
+
+            // בניית אובייקט משתמש מהמידע בtoken
+            const user = {
+              id:
+                payload.id ||
+                payload[
+                  'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'
+                ] ||
+                0,
+              username:
+                payload.username ||
+                payload.name ||
+                payload.unique_name ||
+                this.dto.email.split('@')[0],
+              email: payload.email || this.dto.email,
+              role: payload.role || 'Member',
+            };
+
+            console.log('Created user object:', user);
+            localStorage.setItem('current_user', JSON.stringify(user));
+
+            // עדכון מפורש של ה-authService
+            this.authService.updateUserAfterLogin(user);
+
+            // ניסיון נוסף - עדכון מחדש של משתנים הקשורים להתחברות
+            localStorage.setItem('isLoggedIn', 'true');
+
+            // שליחת אירוע התחברות מותאם ישירות מקומפוננט ההתחברות
+            window.dispatchEvent(
+              new CustomEvent('userLoggedIn', { detail: user })
+            );
+            console.log(
+              'Dispatched custom login event directly from Login component'
+            );
           }
         } catch (e) {
           console.error('Error parsing JWT token:', e);
@@ -130,11 +156,10 @@ export class Login {
     });
   }
   forgotPassword() {
-  this.snackBar.open('באסה לך', 'סגור', {
-    duration: 3000,
-    horizontalPosition: 'center',
-    verticalPosition: 'bottom',
-  });
-}
-
+    this.snackBar.open('באסה לך', 'סגור', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+    });
+  }
 }

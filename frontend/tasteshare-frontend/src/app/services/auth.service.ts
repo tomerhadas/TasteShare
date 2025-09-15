@@ -150,6 +150,28 @@ export class AuthService {
     );
   }
 
+  // מתודה חדשה לעדכון המשתמש מבחוץ (לשימוש ע"י Login component)
+  updateUserAfterLogin(user: UserDto): void {
+    console.log('AuthService: Updating user after external login', user);
+
+    // שמירת המשתמש ב-localStorage (למקרה שעדיין לא נשמר שם)
+    localStorage.setItem(this.userKey, JSON.stringify(user));
+
+    // עדכון ה-BehaviorSubject
+    this.currentUserSubject.next(user);
+
+    // בדיקה שהעדכון התבצע בהצלחה
+    console.log(
+      'Current user in subject after update:',
+      this.currentUserSubject.value
+    );
+
+    // פרסום אירוע מיוחד שמסמן שהמשתמש התעדכן (גם דרך document וגם דרך window)
+    const userEvent = new CustomEvent('userLoggedIn', { detail: user });
+    document.dispatchEvent(userEvent);
+    window.dispatchEvent(userEvent);
+  }
+
   isLoggedIn(): boolean {
     return !!this.getToken();
   }

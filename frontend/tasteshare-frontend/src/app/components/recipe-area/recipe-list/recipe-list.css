@@ -1,15 +1,16 @@
 :host {
-  --bg: #0b1426;
-  --card-bg: #fff;
-  --text: #1e293b;
-  --text-muted: #475569;
-  --border: #e5e7eb;
-  --shadow: rgba(0, 0, 0, 0.15);
-  --primary: #2563eb;
-  --warn: #e53e3e;
-  --accent: #16a34a;
+  --bg: #0b1426;          /* רקע עמוד כהה */
+  --card-bg: #1e293b;     /* רקע קלפים */
+  --text: #f8fafc;        /* טקסט לבן */
+  --text-muted: #cbd5e1;  /* טקסט משני */
+  --border: #334155;      /* גבולות */
+  --shadow: rgba(0, 0, 0, 0.5);
+  --primary: #3b82f6;
+  --warn: #ef4444;
+  --accent: #22c55e;
 }
 
+/* === Container === */
 .recipes-container {
   min-height: calc(100vh - 64px);
   padding: 24px;
@@ -18,15 +19,15 @@
   font-family: Arial, sans-serif;
 }
 
-/* Header */
+/* === Header === */
 .page-header {
   text-align: center;
   margin-bottom: 20px;
 }
 .page-header h1 { color: #fff; margin: 0; }
-.page-header .subtitle { color: #9ca3af; }
+.page-header .subtitle { color: var(--text-muted); }
 
-/* Filters */
+/* === Filters === */
 .filters-section {
   display: flex;
   gap: 12px;
@@ -35,44 +36,82 @@
   margin-bottom: 20px;
 }
 
-/* Grid */
+/* שדות סינון */
+:host ::ng-deep .filters-section .mat-mdc-form-field {
+  background: #1e293b !important;
+  border: 1px solid #475569 !important;
+  border-radius: 8px;
+  padding: 4px 8px;
+  color: #fff !important;
+}
+
+/* טקסט ואייקונים */
+:host ::ng-deep .filters-section input,
+:host ::ng-deep .filters-section .mat-mdc-select-value {
+  color: #fff !important;
+}
+
+:host ::ng-deep .filters-section input::placeholder,
+:host ::ng-deep .filters-section .mat-mdc-select-placeholder {
+  color: #94a3b8 !important;
+}
+
+:host ::ng-deep .filters-section .mat-mdc-form-field-icon-suffix mat-icon,
+:host ::ng-deep .filters-section .mat-mdc-select-arrow {
+  color: #94a3b8 !important;
+}
+
+/* hover + focus */
+:host ::ng-deep .filters-section .mat-mdc-form-field:hover {
+  border-color: #60a5fa !important;
+  background: #273449 !important;
+}
+
+:host ::ng-deep .filters-section .mdc-text-field--focused,
+:host ::ng-deep .filters-section .mat-mdc-select-focused {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+/* === Recipe Cards === */
 .recipe-grid {
   display: grid;
   gap: 16px;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
 }
 
-/* Card */
 .recipe-card {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 12px;
   box-shadow: 0 4px 12px var(--shadow);
   overflow: hidden;
-  transition: transform 0.2s;
+  transition: transform 0.2s, background 0.2s;
+  color: var(--text);
 }
-.recipe-card:hover { transform: translateY(-4px); }
+.recipe-card:hover { transform: translateY(-4px); background: #273449; }
 
-/* Image / No-image */
+/* תמונה / no-image */
 .recipe-card img { width: 100%; height: 160px; object-fit: cover; }
 .no-image {
   height: 160px; display: flex; align-items: center; justify-content: center;
-  background: #f1f5f9; color: #94a3b8;
+  background: #334155; color: #94a3b8;
 }
 
-/* Content */
+/* טקסט בכרטיס */
 .recipe-card mat-card-content { padding: 12px 14px; }
-.recipe-title { font-size: 1.1rem; font-weight: 600; margin: 6px 0; }
+.recipe-title { font-size: 1.1rem; font-weight: 600; margin: 6px 0; color: #fff; }
 .recipe-description {
   font-size: 0.9rem; color: var(--text-muted); margin: 0 0 12px;
-  display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 
-/* Meta info */
+/* מידע נוסף */
 .recipe-meta {
-  display: flex; gap: 12px; flex-wrap: wrap; font-size: 0.9rem; color: var(--text-muted);
+  display: flex; gap: 12px; flex-wrap: wrap;
+  font-size: 0.9rem; color: var(--text-muted);
 }
-.recipe-meta mat-icon { font-size: 18px; }
+.recipe-meta mat-icon { font-size: 18px; color: var(--text-muted); }
 
 /* Chips */
 :host ::ng-deep .mat-mdc-chip { border-radius: 999px; font-size: 0.8rem; color: #fff; }
@@ -80,9 +119,15 @@
 :host ::ng-deep .mat-mdc-chip[color="primary"] { background: var(--primary); }
 :host ::ng-deep .mat-mdc-chip[color="accent"] { background: var(--accent); }
 
-/* Actions */
+/* כפתורים */
 mat-card-actions {
   border-top: 1px solid var(--border);
-  padding: 8px 12px; display: flex; justify-content: flex-end;
+  padding: 8px 12px;
+  display: flex;
+  justify-content: flex-end;
 }
-mat-card-actions button { text-transform: none; font-weight: 600; }
+mat-card-actions button {
+  text-transform: none;
+  font-weight: 600;
+  color: #ffffff;
+}

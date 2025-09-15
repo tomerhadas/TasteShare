@@ -98,9 +98,13 @@ export class CommentForm implements OnInit {
       },
       error: () => {
         this.env.errorLog('Error adding comment');
-        this.snackBar.open('An error occurred while adding the comment.', 'Close', {
-          duration: 5000,
-        });
+        this.snackBar.open(
+          'An error occurred while adding the comment.',
+          'Close',
+          {
+            duration: 5000,
+          }
+        );
       },
       complete: () => {
         this.submitting = false;
