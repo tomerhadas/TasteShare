@@ -93,17 +93,13 @@ public class Program
         builder.Services.AddScoped<UserRepository>();
         builder.Services.AddScoped<RecipeRepository>();
         builder.Services.AddScoped<CommentRepository>();
-        builder.Services.AddScoped<RecipeIngredientRepository>();
-        builder.Services.AddScoped<RecipeStepRepository>();
-        builder.Services.AddScoped<RecipeImageRepository>();
+
 
         // Services
         builder.Services.AddScoped<UserService>();
         builder.Services.AddScoped<RecipeService>();
         builder.Services.AddScoped<CommentService>();
-        builder.Services.AddScoped<RecipeIngredientService>();
-        builder.Services.AddScoped<RecipeStepService>();
-        builder.Services.AddScoped<RecipeImageService>();
+
 
         var app = builder.Build();
 
