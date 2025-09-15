@@ -45,4 +45,13 @@ public class UserService
 
         return JwtHelper.GetNewToken(user);
     }
+    public async Task<bool> DeleteUserAsync(int userId)
+    {
+        var user = await _userRepository.GetByIdAsync(userId);
+        if (user == null)
+            return false;
+
+        await _userRepository.DeleteAsync(user);
+        return true;
+    }
 }

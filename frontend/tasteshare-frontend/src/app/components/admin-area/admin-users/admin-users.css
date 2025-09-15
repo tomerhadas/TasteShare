@@ -1,0 +1,68 @@
+.admin-users {
+  padding: 0 10px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #1e293b;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 18px;
+  color: #64748b;
+}
+
+.error-message {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.users-table {
+  width: 100%;
+}
+
+.mat-column-id {
+  max-width: 80px;
+}
+
+.mat-column-actions {
+  max-width: 120px;
+  text-align: center;
+}
+
+.delete-btn {
+  min-width: unset;
+  padding: 0 10px;
+}
+
+.delete-btn mat-icon {
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+  line-height: 18px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 50px 0;
+  color: #64748b;
+  font-size: 18px;
+}
+
+.admin-name {
+  color: #1d4ed8;
+  font-weight: 500;
+}
+
+.member-name {
+  color: #047857;
+}

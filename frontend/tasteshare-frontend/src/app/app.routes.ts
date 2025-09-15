@@ -8,6 +8,10 @@ import { RecipeDetails } from './components/recipe-area/recipe-details/recipe-de
 import { Home } from './components/page-area/home/home';
 import { authGuard } from './guards/auth.guard';
 import { MyRecipes } from './components/user-area/my-recipes/my-recipes';
+import { AdminDashboard } from './components/admin-area/admin-dashboard/admin-dashboard';
+import { AdminUsers } from './components/admin-area/admin-users/admin-users';
+import { AdminRecipes } from './components/admin-area/admin-recipes/admin-recipes';
+import { AdminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -32,6 +36,18 @@ export const routes: Routes = [
 
   // User area
   { path: 'my-recipes', component: MyRecipes, canActivate: [authGuard] },
+
+  // Admin area
+  {
+    path: 'admin',
+    component: AdminDashboard,
+    canActivate: [AdminGuard],
+    children: [
+      { path: '', redirectTo: 'users', pathMatch: 'full' },
+      { path: 'users', component: AdminUsers },
+      { path: 'recipes', component: AdminRecipes },
+    ],
+  },
 
   // Catch-all
   { path: '**', redirectTo: 'home' },

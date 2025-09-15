@@ -51,5 +51,22 @@ public class UserController : ControllerBase, IDisposable
         return Ok(token);
     }
 
+    // מתודה חדשה למחיקת משתמש על ידי מנהל
+    [HttpDelete("delete/{id:int}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> DeleteUser(int id)
+    {
+        // מניעת מחיקה עצמית של מנהלים
+        var adminId = int.Parse(User.FindFirst("id")!.Value);
+        if (id == adminId)
+            return BadRequest("מנהלים אינם יכולים למחוק את החשבון של עצמם");
+
+        // הוספת מתודה DeleteUserAsync לשירות המשתמשים
+        var success = await _userService.DeleteUserAsync(id);
+        if (!success)
+            return NotFound();
+
+        return NoContent();
+    }
     public void Dispose() { }
 }

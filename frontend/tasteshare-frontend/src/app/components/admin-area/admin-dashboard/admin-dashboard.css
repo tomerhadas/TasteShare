@@ -1,0 +1,50 @@
+.admin-dashboard {
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #1e293b;
+}
+
+.admin-nav {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.admin-nav a {
+  padding: 10px 20px;
+  margin: 0 10px;
+  border-radius: 5px;
+  background-color: #e2e8f0;
+  color: #1e293b;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.admin-nav a:hover {
+  background-color: #cbd5e1;
+}
+
+.admin-nav a.active {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.admin-content {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  min-height: 400px;
+}
+
+.mat-tab-group {
+  margin-bottom: 20px;
+}
+
+.mat-tab-header {
+  margin-bottom: 20px;
+}
