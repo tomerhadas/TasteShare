@@ -54,17 +54,6 @@
       <td mat-cell *matCellDef="let recipe">{{ recipe.authorName }}</td>
     </ng-container>
 
-    <!-- View Count Column -->
-    <ng-container matColumnDef="viewCount">
-      <th mat-header-cell *matHeaderCellDef>צפיות</th>
-      <td mat-cell *matCellDef="let recipe">
-        <div class="view-count">
-          <mat-icon>visibility</mat-icon>
-          {{ recipe.viewCount }}
-        </div>
-      </td>
-    </ng-container>
-
     <!-- Actions Column -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>פעולות</th>

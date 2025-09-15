@@ -38,7 +38,6 @@ export class AdminRecipes implements OnInit {
     'foodType',
     'difficulty',
     'authorName',
-    'viewCount',
     'actions',
   ];
 
